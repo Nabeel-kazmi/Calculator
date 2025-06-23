@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SwiftCalc Pro | Polished</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        :root {
+            --font-family-ui: 'Inter', sans-serif;
+            --font-family-display: 'Roboto Mono', monospace;
+            --transition-speed-fast: 0.15s;
+            --transition-speed-medium: 0.3s;
+            --transition-speed-slow: 0.5s;
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 20px;
+            --grid-gap: 8px;
+            --panel-switcher-width: 75px;
+            --button-height-main: 60px;
+            --button-height-drawer: 50px;
+
+            --primary-hue: 35; --primary-saturation: 100%; --primary-lightness: 55%; 
+            --accent-hue: 210; --accent-saturation: 15%; --accent-lightness: 75%; 
+            
+            --bg-main-color: #262626;
+            --bg-surface-color: #333333;
+            --bg-surface-alt-color: #404040;
+            --bg-display-color: #1a1a1a;
+            
+            --text-primary-color: #f0f0f0;
+            --text-secondary-color: #b0b0b0;
+            --text-on-primary-color: #111111;
+            --text-on-accent-color: #111111;
+            
+            --border-color-soft: #505050;
+            --border-color-strong: #636363;
+            
+            --shadow-color-soft-rgb: 0, 0, 0;
+            --shadow-opacity-soft: 0.2;
+            --shadow-color-medium-rgb: 0, 0, 0;
+            --shadow-opacity-medium: 0.35;
+
+            --error-color-val: #ff6b6b;
+            --success-color-val: #63e6be;
+            --warning-color-val: #ffae42; 
+            --info-color-val: hsl(var(--primary-hue), var(--primary-saturation), var(--primary-lightness));
+
+            --bg-texture: none; 
+        }
+
+        body.theme-silver-sky {
+            --primary-hue: 210; --primary-saturation: 80%; --primary-lightness: 60%; 
+            --accent-hue: 200; --accent-saturation: 10%; --accent-lightness: 55%; 
+
+            --bg-main-color: #e8edf3; 
+            --bg-surface-color: #f7f9fc; 
+            --bg-surface-alt-color: #dde4ed; 
+            --bg-display-color: #e0e6ef; 
+            
+            --text-primary-color: #2c3e50; 
+            --text-secondary-color: #7f8c9a; 
+            --text-on-primary-color: #ffffff;
+            --text-on-accent-color: #ffffff;
+            
+            --border-color-soft: #d1dae3;
+            --border-color-strong: #b8c2cc;
+
+            --shadow-color-soft-rgb: 100, 110, 120;
+            --shadow-opacity-soft: 0.15;
+            --shadow-color-medium-rgb: 90, 100, 110;
+            --shadow-opacity-medium: 0.2;
+            --bg-texture: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        body.theme-aurora-gradient {
+            --primary-hue: 270; --primary-saturation: 70%; --primary-lightness: 60%; 
+            --accent-hue: 330; --accent-saturation: 80%; --accent-lightness: 65%; 
+
+            --bg-main-color: linear-gradient(135deg, hsl(240, 60%, 25%), hsl(280, 50%, 20%));
+            --bg-surface-color: linear-gradient(135deg, hsla(250, 50%, 35%, 0.9), hsla(290, 40%, 30%, 0.9));
+            --bg-surface-alt-color: linear-gradient(135deg, hsla(var(--primary-hue), 50%, 45%, 0.8), hsla(var(--accent-hue),40%,40%,0.8));
+            --bg-display-color: hsla(260, 50%, 15%, 0.95);
+            
+            --text-primary-color: #f0f0f5;
+            --text-secondary-color: #c0c0d5;
+            --text-on-primary-color: #ffffff;
+            --text-on-accent-color: #ffffff;
+            
+            --border-color-soft: hsla(260, 30%, 60%, 0.5);
+            --border-color-strong: hsla(260, 30%, 70%, 0.7);
+
+            --shadow-color-soft-rgb: 0,0,0; --shadow-opacity-soft: 0.3;
+            --shadow-color-medium-rgb: 0,0,0; --shadow-opacity-medium: 0.5;
+            --bg-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        body.theme-glass-frost {
+            --primary-hue: 220; --primary-saturation: 70%; --primary-lightness: 65%; 
+            --accent-hue: 180; --accent-saturation: 50%; --accent-lightness: 70%; 
+
+            --bg-main-color: #3a3a5a; 
+            --bg-surface-color: rgba(255, 255, 255, 0.1);
+            --bg-surface-alt-color: rgba(255, 255, 255, 0.15);
+            --bg-display-color: rgba(0, 0, 0, 0.2);
+            
+            --text-primary-color: #ffffff;
+            --text-secondary-color: #e0e0e0;
+            --text-on-primary-color: #ffffff;
+            --text-on-accent-color: #111111;
+            
+            --border-color-soft: rgba(255, 255, 255, 0.2);
+            --border-color-strong: rgba(255, 255, 255, 0.3);
+
+            --shadow-color-soft-rgb: 0,0,0; --shadow-opacity-soft: 0.25;
+            --shadow-color-medium-rgb: 0,0,0; --shadow-opacity-medium: 0.4;
+            --bg-texture: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-2.21 0-4-1.79-4-4 0-3.314-2.686-6-6-6s-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        body.theme-glass-frost .calculator, 
+        body.theme-glass-frost .side-drawer,
+        body.theme-glass-frost .modal-content,
+        body.theme-glass-frost .toast,
+        body.theme-glass-frost .fab-menu {
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            border: 1px solid var(--border-color-soft);
+        }
+        body.theme-glass-frost .panel-switcher { 
+             background: transparent !important; 
+             border-right: 1px solid var(--border-color-soft);
+        }
+        body.theme-glass-frost .panel-switcher button {
+            background: rgba(255,255,255,0.1);
+        }
+        body.theme-glass-frost .panel-switcher button.active {
+            background: var(--primary-color-val);
+        }
+
+        :root {
+            --primary-color-val: hsl(var(--primary-hue), var(--primary-saturation), var(--primary-lightness));
+            --primary-dark-val: hsl(var(--primary-hue), var(--primary-saturation), calc(var(--primary-lightness) - 10%));
+            --primary-light-translucent-val: hsla(var(--primary-hue), var(--primary-saturation), calc(var(--primary-lightness) + 10%), 0.2);
+            --accent-color-val: hsl(var(--accent-hue), var(--accent-saturation), var(--accent-lightness));
+            --accent-dark-val: hsl(var(--accent-hue), var(--accent-saturation), calc(var(--accent-lightness) - 10%));
+        }
+
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: var(--font-family-ui);
+            background: var(--bg-main-color);
+            background-image: var(--bg-texture);
+            color: var(--text-primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100dvh; 
+            overflow: hidden; 
+            transition: background var(--transition-speed-medium) ease, color var(--transition-speed-medium) ease;
+            padding: clamp(5px, 2vw, 10px);
+        }
+
+        .calculator-wrapper {
+            width: 100%;
+            max-width: 520px; 
+            height: calc(100dvh - clamp(10px, 4vw, 20px)); 
+            max-height: 900px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculator {
+            width: 100%;
+            height: 100%;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 10px 30px -5px rgba(var(--shadow-color-medium-rgb), var(--shadow-opacity-medium));
+            background: var(--bg-surface-color);
+            display: flex; 
+            flex-direction: row; 
+            overflow: hidden; 
+            position: relative;
+            transition: background var(--transition-speed-medium) ease;
+        }
+
+        .panel-switcher {
+            width: var(--panel-switcher-width);
+            flex-shrink: 0;
+            background: var(--bg-main-color); 
+            padding: var(--grid-gap);
+            display: flex;
+            flex-direction: column;
+            gap: var(--grid-gap);
+            border-right: 1px solid var(--border-color-soft);
+            transition: background var(--transition-speed-medium) ease;
+        }
+        .panel-switcher button {
+            height: 55px; 
+            font-size: 0.75rem; 
+            font-weight: 500; 
+            color: var(--text-secondary-color);
+            background: var(--bg-surface-alt-color); 
+            border: none; 
+            cursor: pointer;
+            border-radius: var(--border-radius-md); 
+            transition: all var(--transition-speed-fast) ease-out;
+            padding: 0 5px; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: normal; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: 0 2px 4px rgba(var(--shadow-color-soft-rgb), var(--shadow-opacity-soft));
+        }
+        .panel-switcher button:hover { background: var(--primary-light-translucent-val); color: var(--primary-color-val); transform: translateY(-2px); }
+        .panel-switcher button:active { transform: translateY(0px) scale(0.95); box-shadow: inset 0 1px 3px rgba(var(--shadow-color-medium-rgb),calc(var(--shadow-opacity-medium) / 2));}
+        .panel-switcher button.active { background: var(--primary-color-val); color: var(--text-on-primary-color); font-weight: 600; box-shadow: 0 4px 8px -2px hsla(var(--primary-hue),var(--primary-saturation),var(--primary-lightness),0.4);}
+
+        .main-calculator-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+            background: var(--bg-surface-color);
+            transition: background var(--transition-speed-medium) ease;
+        }
+        
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px;
+            flex-shrink: 0;
+            background: transparent; 
+            border-bottom: 1px solid var(--border-color-soft);
+        }
+        .calculator-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-color-val); }
+        
+        .display-area {
+            padding: 10px 15px;
+            background: var(--bg-display-color);
+            flex-shrink: 0; 
+            min-height: 90px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; 
+            position: relative; 
+            border-bottom: 1px solid var(--border-color-soft);
+            transition: background var(--transition-speed-medium) ease;
+        }
+        .secondary-display {
+            font-family: var(--font-family-display);
+            font-size: 1rem; color: var(--text-secondary-color); min-height: 20px;
+            opacity: 0.8; text-align: right; width: 100%;
+            overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+            margin-bottom: 4px;
+        }
+        .secondary-display::-webkit-scrollbar { display: none; }
+        .main-display {
+            font-family: var(--font-family-display);
+            font-size: clamp(2.2rem, 7vw, 3.2rem); 
+            font-weight: 400; min-height: 50px; 
+            text-align: right; width: 100%; color: var(--text-primary-color);
+            overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+            line-height: 1.1;
+            font-feature-settings: "tnum"; font-variant-numeric: tabular-nums;
+        }
+        .main-display::-webkit-scrollbar { display: none; }
+        .mode-indicator {
+            position: absolute; top: 4px; 
+            left: 15px; font-size: 0.7rem;
+            color: var(--text-secondary-color); background-color: var(--primary-light-translucent-val);
+            padding: 2px 5px; border-radius: var(--border-radius-sm); opacity: 0.8; z-index: 5;
+        }
+
+        .main-calculator-body {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; 
+            overflow: hidden; 
+            padding: var(--grid-gap);
+            background: transparent;
+        }
+
+        .primary-operations-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--grid-gap);
+            margin-bottom: var(--grid-gap); 
+            flex-shrink: 0;
+        }
+        .primary-operations-grid button {
+            height: calc(var(--button-height-main) * 0.9); 
+            font-size: 0.9rem; 
+        }
+
+        .number-pad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--grid-gap);
+            flex-grow: 1; 
+        }
+
+        .main-calculator-body button {
+            font-family: var(--font-family-ui);
+            font-size: 1.3rem; 
+            height: var(--button-height-main);
+            border: none;
+            background: var(--bg-surface-alt-color);
+            color: var(--text-primary-color);
+            cursor: pointer;
+            transition: all var(--transition-speed-fast) ease-out;
+            font-weight: 500;
+            border-radius: var(--border-radius-md);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 3px 5px -1px rgba(var(--shadow-color-soft-rgb), var(--shadow-opacity-soft)), 0 1px 3px rgba(var(--shadow-color-soft-rgb), calc(var(--shadow-opacity-soft) * 0.8));
+        }
+        .main-calculator-body button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 10px -2px rgba(var(--shadow-color-medium-rgb), var(--shadow-opacity-medium)), 0 2px 5px rgba(var(--shadow-color-medium-rgb), calc(var(--shadow-opacity-medium) * 0.8));
+            background: color-mix(in srgb, var(--bg-surface-alt-color) 80%, var(--primary-color-val) 20%);
+        }
+        .main-calculator-body button:active { 
+            transform: translateY(0px) scale(0.96); 
+            box-shadow: inset 0 2px 4px rgba(var(--shadow-color-medium-rgb), calc(var(--shadow-opacity-medium) / 1.5)); 
+            filter: brightness(0.95);
+        }
+
+        .main-calculator-body .btn-operator { background: var(--accent-color-val); color: var(--text-on-accent-color); font-weight: 500; }
+        .main-calculator-body .btn-operator:hover { background: var(--accent-dark-val); filter: brightness(1.1); }
+        .main-calculator-body .btn-equals { background: var(--primary-color-val); color: var(--text-on-primary-color); font-weight: 700; font-size: 1.5rem; }
+        .main-calculator-body .btn-equals:hover { background: var(--primary-dark-val); filter: brightness(1.1); }
+        .main-calculator-body .btn-clear { background: var(--bg-surface-alt-color); color: var(--error-color-val); font-weight: 500; }
+        .main-calculator-body .btn-clear:hover { background: color-mix(in srgb, var(--error-color-val) 10%, var(--bg-surface-alt-color)); }
+        .main-calculator-body .btn-memory { background: var(--bg-surface-alt-color); color: var(--accent-color-val); font-size: 0.85rem; }
+        .main-calculator-body .btn-memory:hover { background: color-mix(in srgb, var(--accent-color-val) 10%, var(--bg-surface-alt-color)); }
+        .main-calculator-body .btn-wide { grid-column: span 2; }
+
+        .side-drawer {
+            position: absolute; top: 0; right: 0; width: 320px; max-width: calc(100vw - 50px - var(--panel-switcher-width)); height: 100%;
+            background-color: var(--bg-surface-color);
+            box-shadow: -5px 0 20px -5px rgba(var(--shadow-color-medium-rgb), var(--shadow-opacity-medium));
+            transform: translateX(105%); opacity: 0;
+            transition: transform var(--transition-speed-medium) cubic-bezier(0.4, 0, 0.2, 1), opacity var(--transition-speed-medium) ease-out, background var(--transition-speed-medium) ease;
+            z-index: 1000;
+            display: flex; flex-direction: column;
+        }
+        .side-drawer.open { transform: translateX(0); opacity: 1;}
+        .side-drawer-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px var(--grid-gap);
+            border-bottom: 1px solid var(--border-color-soft);
+            flex-shrink: 0; background: transparent;
+        }
+        .side-drawer-header h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary-color-val); margin-left: 5px; }
+        .side-drawer-header .control-btn { margin-left: auto; } 
+        .side-drawer-header .close-drawer-x-btn {
+            background: transparent; border: none; color: var(--text-secondary-color);
+            font-size: 1.6rem; padding: 0 8px; line-height: 1; box-shadow: none;
+            transition: color var(--transition-speed-fast);
+        }
+        .side-drawer-header .close-drawer-x-btn:hover { color: var(--text-primary-color); transform: scale(1.1); }
+
+        .side-drawer-content {
+            padding: var(--grid-gap); overflow-y: auto; flex-grow: 1;
+            scrollbar-width: thin; scrollbar-color: var(--primary-light-translucent-val) transparent;
+        }
+        .side-drawer-content::-webkit-scrollbar { width: 8px; }
+        .side-drawer-content::-webkit-scrollbar-track { background: transparent; }
+        .side-drawer-content::-webkit-scrollbar-thumb { background-color: var(--primary-light-translucent-val); border-radius: 4px; border: 2px solid transparent; background-clip: content-box;}
+
+        .drawer-button-panel {
+            display: grid; grid-template-columns: repeat(3, 1fr); 
+            gap: var(--grid-gap);
+        }
+        .drawer-button-panel.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .drawer-button-panel.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .drawer-button-panel button {
+            font-size: 0.85rem; height: var(--button-height-drawer);
+            background-color: var(--bg-surface-alt-color); color: var(--text-primary-color);
+            border: 1px solid transparent; border-radius: var(--border-radius-sm);
+            box-shadow: 0 2px 3px rgba(var(--shadow-color-soft-rgb),var(--shadow-opacity-soft));
+            transition: all var(--transition-speed-fast) cubic-bezier(.25,.8,.25,1);
+            padding: 0 5px; line-height: 1.1; white-space: normal;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+        .drawer-button-panel button:hover {
+            background-color: color-mix(in srgb, var(--bg-surface-alt-color) 85%, var(--primary-color-val) 15%);
+            color: var(--primary-color-val); border-color: var(--primary-light-translucent-val);
+            transform: translateY(-1px); box-shadow: 0 3px 6px rgba(var(--shadow-color-soft-rgb),var(--shadow-opacity-soft));
+        }
+        .drawer-button-panel button:active {
+            transform: translateY(0px) scale(0.97);
+            background-color: var(--primary-light-translucent-val);
+            box-shadow: inset 0 1px 2px rgba(var(--shadow-color-medium-rgb),var(--shadow-opacity-medium));
+        }
+        .drawer-panel-subtitle { font-size: 0.9rem; font-weight: 600; color: var(--primary-color-val); margin-bottom: 10px; margin-top:10px; text-align: left; padding: 8px 4px; border-bottom: 1px solid var(--border-color-soft);}
+        .drawer-panel-subtitle:first-of-type { margin-top: 0;}
+
+
+        .history-drawer-panel { display: flex; flex-direction: column; height: 100%; }
+        .history-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; background: var(--bg-display-color); border-radius: var(--border-radius-sm); padding: 8px; }
+        .history-list li { display: flex; justify-content: space-between; align-items: center; padding: 10px 8px; border-bottom: 1px solid var(--border-color-soft); background-color: var(--bg-surface-alt-color); border-radius: var(--border-radius-sm); margin-bottom: var(--grid-gap); color: var(--text-primary-color); cursor: pointer; transition: background-color 0.15s ease; }
+        .history-list li:hover { background-color: color-mix(in srgb, var(--bg-surface-alt-color) 80%, var(--primary-color-val) 20%); }
+        .history-list li:last-child { border-bottom: none; }
+        .history-entry-text { flex-grow: 1; margin-right: 8px; overflow: hidden; }
+        .history-expression { font-size: 0.8rem; color: var(--text-secondary-color); word-break: break-all; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-result { font-size: 1rem; font-weight: 500; color: var(--text-primary-color); word-break: break-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-delete-btn { background: transparent; border: none; color: var(--error-color-val); font-size: 1.2rem; padding: 4px; cursor: pointer; line-height: 1; box-shadow: none; flex-shrink: 0; border-radius: 50%; }
+        .history-delete-btn:hover { color: var(--text-on-primary-color); background-color: var(--error-color-val); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(var(--shadow-color-medium-rgb), 0.6); display: flex; align-items: center; justify-content: center; z-index: 10001; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed-medium) ease, visibility var(--transition-speed-medium) ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content { background-color: var(--bg-surface-color); padding: 25px; border-radius: var(--border-radius-lg); box-shadow: 0 10px 30px rgba(var(--shadow-color-medium-rgb), var(--shadow-opacity-medium)); width: 90%; max-width: 480px; display: flex; flex-direction: column; max-height: 90vh; border: 1px solid var(--border-color-soft); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color-soft); padding-bottom: 15px; margin-bottom: 18px; }
+        .modal-header h3 { margin: 0; font-size: 1.3rem; color: var(--primary-color-val); }
+        .modal-close-btn { background: transparent; border: none; font-size: 1.9rem; color: var(--text-secondary-color); cursor: pointer; padding: 0; line-height: 1; box-shadow: none; transition: color var(--transition-speed-fast); }
+        .modal-close-btn:hover { color: var(--text-primary-color); transform: scale(1.1); }
+        .modal-body { margin-bottom: 25px; overflow-y: auto; padding-right: 10px; font-size: 0.95rem; }
+        .modal-body label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-secondary-color); font-weight: 500; }
+        .modal-body input[type="text"], .modal-body input[type="number"], .modal-body select, .modal-body textarea { width: 100%; padding: 12px 15px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color-soft); background-color: var(--bg-display-color); color: var(--text-primary-color); font-size: 1rem; margin-bottom: 12px; font-family: var(--font-family-ui); }
+        .modal-body textarea { min-height: 80px; resize: vertical; }
+        .modal-body input:focus, .modal-body select:focus, .modal-body textarea:focus { outline: none; border-color: var(--primary-color-val); box-shadow: 0 0 0 3px var(--primary-light-translucent-val); }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+        .modal-btn { padding: 12px 20px; border: none; border-radius: var(--border-radius-sm); font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all var(--transition-speed-fast); }
+        .modal-btn-primary { background-color: var(--primary-color-val); color: var(--text-on-primary-color); }
+        .modal-btn-primary:hover { background-color: var(--primary-dark-val); transform: translateY(-1px); }
+        .modal-btn-secondary { background-color: var(--bg-surface-alt-color); color: var(--text-primary-color); }
+        .modal-btn-secondary:hover { background-color: var(--primary-light-translucent-val); }
+
+        .unit-converter-modal-body .input-group { margin-bottom: 15px; }
+        .unit-converter-modal-body .select-group { display: flex; gap: 12px; margin-bottom: 15px; }
+        .unit-converter-modal-body .select-group > div { flex: 1; }
+        #conversionResultDisplay { margin-top: 18px; padding: 15px; background-color: var(--bg-display-color); border-radius: var(--border-radius-sm); font-weight: 500; font-size: 1.05rem; color: var(--success-color-val); word-break: break-all; min-height: 1.5em; text-align: center; border: 1px solid var(--border-color-soft); }
+
+        .live-base-converter-panel, .statistics-drawer-panel, .fractions-drawer-panel { display: flex; flex-direction: column; gap: 12px; height: 100%; }
+        .base-input-card, .stats-input-area, .fraction-section { background-color: var(--bg-display-color); padding: 15px; border-radius: var(--border-radius-md); }
+        .base-input-card label, .stats-input-area label, .fraction-input-group label { display: block; font-size: 0.85rem; color: var(--primary-color-val); margin-bottom: 8px; font-weight: 500; }
+        .input-with-copy input[type="text"], .statistics-drawer-panel textarea, .fractions-drawer-panel .fraction-input-group input[type="text"] { width: 100%; padding: 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color-soft); background-color: var(--bg-surface-alt-color); color: var(--text-primary-color); font-size: 0.95rem; }
+        .input-with-copy input[type="text"]:focus, .statistics-drawer-panel textarea:focus, .fractions-drawer-panel .fraction-input-group input[type="text"]:focus { outline: none; border-color: var(--primary-color-val); box-shadow: 0 0 0 2px var(--primary-light-translucent-val); }
+        .copy-btn { background-color: var(--bg-surface-alt-color); color: var(--text-secondary-color); border: none; border-radius: var(--border-radius-sm); width: 40px; height: 40px; font-size: 1rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition-speed-fast); }
+        .copy-btn:hover { background-color: var(--primary-light-translucent-val); color: var(--primary-color-val); transform: scale(1.05); }
+        .action-btn { width: 100%; padding: 12px; font-size: 0.95rem; font-weight: 500; background-color: var(--primary-color-val); color: var(--text-on-primary-color); border: none; border-radius: var(--border-radius-sm); cursor: pointer; margin-top: 8px; transition: all var(--transition-speed-fast); }
+        .action-btn:hover { background-color: var(--primary-dark-val); transform: translateY(-1px); }
+        .stats-results-container { margin-top: 0; padding: 15px; background-color: var(--bg-display-color); border-radius: var(--border-radius-md); overflow-y: auto; flex-grow: 1; font-size: 0.9rem; line-height: 1.6; }
+        .stats-results-container .results-placeholder { color: var(--text-secondary-color); text-align: center; margin-top: 18px; }
+        .stats-result-grid { display: grid; grid-template-columns: auto 1fr; gap: 8px 15px; align-items: center; }
+        .stats-result-grid dt { font-weight: 500; color: var(--text-secondary-color); text-align: right; }
+        .stats-result-grid dd { font-weight: normal; color: var(--text-primary-color); word-break: break-all; }
+        .stats-results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;}
+        .stats-results-header h4 { color: var(--primary-color-val); margin: 0; font-size: 1.05rem; }
+        .stats-results-header .copy-btn { height: 32px; width: auto; padding: 0 10px; font-size: 0.8rem;}
+
+        .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--bg-surface-alt-color); color: var(--text-primary-color); padding: 12px 20px; border-radius: var(--border-radius-md); box-shadow: 0 5px 15px rgba(var(--shadow-color-medium-rgb), var(--shadow-opacity-medium)); z-index: 10005; opacity: 0; transition: opacity var(--transition-speed-medium) ease, bottom var(--transition-speed-medium) ease; font-size: 0.9rem; max-width: 90%; text-align: center; border-top: 4px solid var(--info-color-val); }
+        .toast.show { opacity: 1; bottom: 25px; }
+        .toast.error { border-top-color: var(--error-color-val); background-color: color-mix(in srgb, var(--error-color-val) 15%, var(--bg-surface-alt-color)); color: var(--error-color-val); }
+        .toast.success { border-top-color: var(--success-color-val); background-color: color-mix(in srgb, var(--success-color-val) 15%, var(--bg-surface-alt-color)); color: var(--success-color-val); }
+        .toast.warning { border-top-color: var(--warning-color-val); background-color: color-mix(in srgb, var(--warning-color-val) 15%, var(--bg-surface-alt-color)); color: var(--warning-color-val); }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(var(--shadow-color-medium-rgb),0.5); z-index: 999; display: none; opacity: 0; transition: opacity var(--transition-speed-medium) ease-in-out; }
+        .drawer-overlay.active { display: block; opacity: 1; }
+
+        .pulse { animation: pulseAnim var(--transition-speed-medium) ease-out; }
+        @keyframes pulseAnim { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+        .shake { animation: shakeAnim 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shakeAnim { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-3px); } 40%, 60% { transform: translateX(3px); } }
+
+        .fab-container { position: fixed; bottom: 20px; right: 20px; z-index: 10010; }
+        .fab-button {
+            width: 56px; height: 56px; border-radius: 50%;
+            background-color: var(--primary-color-val); color: var(--text-on-primary-color);
+            border: none; box-shadow: 0 4px 12px hsla(var(--primary-hue),var(--primary-saturation),var(--primary-lightness),0.5);
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all var(--transition-speed-medium) cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fab-button:hover { transform: scale(1.1); box-shadow: 0 6px 16px hsla(var(--primary-hue),var(--primary-saturation),var(--primary-lightness),0.6); }
+        .fab-button.active { transform: rotate(135deg); }
+        .fab-menu {
+            position: absolute; bottom: 70px; right: 0;
+            background-color: var(--bg-surface-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 6px 20px rgba(var(--shadow-color-medium-rgb), var(--shadow-opacity-medium));
+            padding: 10px;
+            display: flex; flex-direction: column; gap: 8px;
+            opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.95);
+            transition: opacity var(--transition-speed-fast) ease, visibility var(--transition-speed-fast) ease, transform var(--transition-speed-fast) cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 180px;
+        }
+        .fab-menu.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .fab-menu-item {
+            background: var(--bg-surface-alt-color); color: var(--text-secondary-color);
+            border: none; padding: 10px 12px; border-radius: var(--border-radius-sm);
+            font-size: 0.85rem; text-align: left; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+            transition: background var(--transition-speed-fast), color var(--transition-speed-fast);
+        }
+        .fab-menu-item:hover { background: var(--primary-light-translucent-val); color: var(--primary-color-val); }
+        .fab-menu-item i { width: 18px; text-align: center; }
+
+
+        @media (max-width: 768px) {
+            :root { --button-height-main: 55px; --grid-gap: 6px; }
+            .panel-switcher { width: 65px; }
+            .panel-switcher button { height: 50px; font-size: 0.7rem; }
+            .main-display { font-size: clamp(2rem, 6vw, 2.8rem); }
+            .primary-operations-grid button { height: calc(var(--button-height-main) * 0.85); font-size: 0.85rem; }
+            .side-drawer { width: 280px; max-width: calc(100vw - 40px - var(--panel-switcher-width)); }
+        }
+         @media (max-width: 480px) {
+            :root { --button-height-main: 50px; --grid-gap: 5px; --border-radius-lg: 16px; --border-radius-md: 10px; }
+            .calculator-wrapper { max-width: 100%; height: 100dvh; padding:0; border-radius:0;}
+            .calculator { border-radius: 0; height:100%;}
+            .panel-switcher { width: 60px; padding: 5px; }
+            .panel-switcher button { height: 48px; font-size: 0.65rem; border-radius: var(--border-radius-sm); }
+            .header { padding: 8px 10px; }
+            .calculator-title { font-size: 1rem; }
+            .display-area { padding: 8px 10px; min-height: 80px; }
+            .main-display { font-size: clamp(1.8rem, 7vw, 2.5rem); min-height: 45px; }
+            .secondary-display { font-size: 0.9rem; min-height: 18px; }
+            .mode-indicator { font-size: 0.65rem; padding: 1px 4px; left: 10px; top: 3px;}
+            .main-calculator-body { padding: 5px; }
+            .main-calculator-body button { height: var(--button-height-main); font-size: 1.1rem; border-radius: var(--border-radius-sm); }
+            .primary-operations-grid button { height: calc(var(--button-height-main) * 0.8); font-size: 0.8rem; }
+            .side-drawer { width: calc(100vw - 30px - var(--panel-switcher-width)); }
+            .fab-container { bottom: 15px; right: 15px; }
+            .fab-button { width: 50px; height: 50px; font-size: 1.3rem; }
+            .fab-menu { bottom: 65px; }
+        }
+
+    </style>
+</head>
+<body> 
+    <div class="calculator-wrapper">
+        <div class="calculator">
+            <div class="panel-switcher">
+                <button id="panelBtnBasic" class="active" data-panel-id="basicOpsPanel" title="Basic Calculator View">Basic</button>
+                <button id="panelBtnScientific" data-panel-id="scientificDrawerPanel" title="Scientific Functions">Sci</button>
+                <button id="panelBtnConverter" data-panel-id="converterDrawerPanel" title="Unit Converters">Unit</button>
+                <button id="panelBtnMore" data-panel-id="moreDrawerPanel" title="More Tools & History">More</button> 
+            </div>
+
+            <div class="main-calculator-area">
+                <div class="header">
+                    <div class="calculator-title">SwiftCalc Pro</div>
+                </div>
+
+                <div class="display-area">
+                    <div class="mode-indicator" id="modeIndicator">DEG</div>
+                    <div class="secondary-display" id="secondaryDisplay"></div>
+                    <div class="main-display" id="mainDisplay">0</div>
+                </div>
+
+                <div class="main-calculator-body">
+                    <div class="primary-operations-grid" id="basicOpsPanel">
+                        <button class="btn-clear" title="Clear All (Esc)" onclick="clearAll()">AC</button>
+                        <button title="Toggle Sign" onclick="toggleSign()">+/-</button>
+                        <button title="Percentage" onclick="appendOperator('%')">%</button>
+                        <button title="Last Answer (A)" onclick="appendAns()">ANS</button>
+                        <button class="btn-memory" title="Memory Store" onclick="memoryStore()">MS</button>
+                        <button class="btn-memory" title="Memory Recall" onclick="memoryRecall()">MR</button>
+                        <button class="btn-memory" title="Memory Clear" onclick="memoryClear()">MC</button>
+                        <button class="btn-memory" title="Memory Add" onclick="memoryAdd()">M+</button>
+                    </div>
+
+                    <div class="number-pad-grid">
+                        <button title="Delete Last (Backspace)" class="btn-clear" ondblclick="clearAll()" onclick="deleteChar()"><i class="fas fa-backspace"></i></button>
+                        <button onclick="appendOperator('(')" class="secondary">(</button>
+                        <button onclick="appendOperator(')')" class="secondary">)</button>
+                        <button class="btn-operator" title="Divide" onclick="appendOperator('/')">÷</button>
+
+                        <button onclick="appendNumber('7')">7</button>
+                        <button onclick="appendNumber('8')">8</button>
+                        <button onclick="appendNumber('9')">9</button>
+                        <button class="btn-operator" title="Multiply" onclick="appendOperator('*')">×</button>
+
+                        <button onclick="appendNumber('4')">4</button>
+                        <button onclick="appendNumber('5')">5</button>
+                        <button onclick="appendNumber('6')">6</button>
+                        <button class="btn-operator" title="Subtract" onclick="appendOperator('-')">−</button>
+
+                        <button onclick="appendNumber('1')">1</button>
+                        <button onclick="appendNumber('2')">2</button>
+                        <button onclick="appendNumber('3')">3</button>
+                        <button class="btn-operator" title="Add" onclick="appendOperator('+')">+</button>
+
+                        <button class="btn-wide" onclick="appendNumber('0')">0</button>
+                        <button onclick="appendDecimalPoint()">.</button>
+                        <button class="btn-equals" title="Equals (Enter)" onclick="calculateResult()">=</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-drawer" id="sideDrawer">
+                <div class="side-drawer-header">
+                    <h3 id="sideDrawerTitle">Panel</h3>
+                    <div id="sideDrawerDynamicControls"></div> 
+                    <button class="close-drawer-x-btn" onclick="closeSideDrawer()" title="Close Panel (Esc)">&times;</button>
+                </div>
+                <div class="side-drawer-content" id="sideDrawerContent">
+                </div>
+            </div>
+            <div class="drawer-overlay" id="drawerOverlay" onclick="closeSideDrawer()"></div>
+            
+            <div class="fab-container">
+                <div class="fab-menu" id="fabMenu">
+                    <button class="fab-menu-item" id="fabThemeToggleBtn"><i class="fas fa-palette"></i>Cycle Theme</button>
+                    <button class="fab-menu-item" id="fabSoundToggleBtn"><i class="fas fa-volume-up"></i>Toggle Sound</button>
+                    <button class="fab-menu-item" id="fabDegRadToggleBtn"><i class="fas fa-calculator"></i>Angle: DEG</button>
+                </div>
+                <button class="fab-button" id="fabToggleBtn" title="Settings"><i class="fas fa-cog"></i></button>
+            </div>
+
+        </div> 
+    </div> 
+    <div class="toast" id="toast"></div>
+
+    <template id="scientificDrawerPanelTemplate">
+        <div class="drawer-button-panel cols-4"> 
+            <button onclick="handleDrawerAction(() => appendFunction('sin('))">sin</button>
+            <button onclick="handleDrawerAction(() => appendFunction('cos('))">cos</button>
+            <button onclick="handleDrawerAction(() => appendFunction('tan('))">tan</button>
+            <button onclick="handleDrawerAction(() => appendFunction('sqrt('))">√</button>
+            <button onclick="handleDrawerAction(() => appendFunction('asin('))">sin⁻¹</button>
+            <button onclick="handleDrawerAction(() => appendFunction('acos('))">cos⁻¹</button>
+            <button onclick="handleDrawerAction(() => appendFunction('atan('))">tan⁻¹</button>
+            <button onclick="handleDrawerAction(() => appendFunction('cbrt('))">³√</button>
+            <button onclick="handleDrawerAction(() => appendFunction('sinh('))">sinh</button>
+            <button onclick="handleDrawerAction(() => appendFunction('cosh('))">cosh</button>
+            <button onclick="handleDrawerAction(() => appendFunction('tanh('))">tanh</button>
+            <button onclick="handleDrawerAction(() => appendOperator('**'))">xʸ</button>
+            <button onclick="handleDrawerAction(() => appendFunction('asinh('))">sinh⁻¹</button>
+            <button onclick="handleDrawerAction(() => appendFunction('acosh('))">cosh⁻¹</button>
+            <button onclick="handleDrawerAction(() => appendFunction('atanh('))">tanh⁻¹</button>
+            <button onclick="handleDrawerAction(() => applyPostFunction('**2', '^2'))">x²</button>
+            <button onclick="handleDrawerAction(() => appendFunction('log10('))">log₁₀</button>
+            <button onclick="handleDrawerAction(() => appendFunction('log('))">ln</button>
+            <button onclick="handleDrawerAction(applyTenPowerX)">10ˣ</button>
+            <button onclick="handleDrawerAction(() => applyPostFunction('**3', '^3'))">x³</button>
+            <button onclick="handleDrawerAction(() => appendFunction('exp('))">eˣ</button>
+            <button onclick="handleDrawerAction(() => applyPostFunction('!', '!'))">x!</button>
+            <button onclick="handleDrawerAction(reciprocal)">1/x</button>
+            <button onclick="handleDrawerAction(() => appendOperator('_mod_'))">mod</button>
+            <button onclick="handleDrawerAction(() => appendConstant('PI_CONST', 'π'))">π</button>
+            <button onclick="handleDrawerAction(() => appendConstant('E_CONST', 'e'))">e</button>
+            <button onclick="handleDrawerAction(() => appendFunction('abs('))">|x|</button>
+            <button onclick="handleDrawerAction(insertRandom)">Rand</button>
+            <button onclick="handleDrawerAction(() => appendFunction('round('))">round</button>
+            <button onclick="handleDrawerAction(() => appendFunction('floor('))">floor</button>
+            <button onclick="handleDrawerAction(() => appendFunction('ceil('))">ceil</button>
+            <button onclick="handleDrawerAction(openQuadraticSolverModal, false, false)">ax²+bx+c</button>
+            <button onclick="handleDrawerAction(openNPRModal, false, false)">nPr</button>
+            <button onclick="handleDrawerAction(openNCRModal, false, false)">nCr</button>
+            <button onclick="handleDrawerAction(openFibonacciModal, false, false)">Fib(n)</button>
+            <button onclick="handleDrawerAction(openXPercentOfYModal, false, false)">X% of Y</button>
+            <button onclick="handleDrawerAction(openGCDModal, false, false)">GCD</button>
+            <button onclick="handleDrawerAction(openLCMModal, false, false)">LCM</button>
+            <button onclick="handleDrawerAction(openSolve2x2Modal, false, false)">Solve 2x2</button>
+            <button onclick="handleDrawerAction(openSolve3x3Modal, false, false)">Solve 3x3</button>
+            <button onclick="handleDrawerAction(() => appendConstant('C_LIGHT', 'c'))" title="Speed of Light">c</button>
+            <button onclick="handleDrawerAction(() => appendConstant('H_PLANCK', 'h'))" title="Planck's Constant">h</button>
+            <button onclick="handleDrawerAction(() => appendConstant('G_GRAV', 'G'))" title="Gravitational Constant">G</button>
+            <button onclick="handleDrawerAction(() => appendConstant('N_AVOGADRO', 'Nₐ'))" title="Avogadro's Number">Nₐ</button>
+            <button onclick="handleDrawerAction(() => appendConstant('R_GAS', 'R'))" title="Ideal Gas Constant">R</button>
+        </div>
+    </template>
+
+    <template id="converterDrawerPanelTemplate">
+        <div class="drawer-button-panel cols-2"> 
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Temperature', tempUnits, 'c'), false, false)">Temperature</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Length', lengthUnits, 'm'), false, false)">Length</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Weight/Mass', weightUnits, 'kg'), false, false)">Weight/Mass</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Angle', angleUnits, 'deg'), false, false)">Angle</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Area', areaUnits, 'm2'), false, false)">Area</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Volume', volumeUnits, 'l'), false, false)">Volume</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Time', timeUnits, 's'), false, false)">Time</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Speed', speedUnits, 'mps'), false, false)">Speed</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Pressure', pressureUnits, 'pa'), false, false)">Pressure</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Energy', energyUnits, 'j'), false, false)">Energy</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Power', powerUnits, 'w'), false, false)">Power</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Data Storage', dataUnits, 'B'), false, false)">Data Storage</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Fuel Economy', fuelEconomyUnits, 'l100km'), false, false)">Fuel Economy</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Frequency', frequencyUnits, 'hz'), false, false)">Frequency</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Volume Flow Rate', volumeFlowUnits, 'm3ps'), false, false)">Volume Flow</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Force', forceUnits, 'n'), false, false)">Force</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Torque', torqueUnits, 'nm'), false, false)">Torque</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Electric Charge', chargeUnits, 'c'), false, false)">Elec. Charge</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Voltage', voltageUnits, 'v'), false, false)">Voltage</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Resistance', resistanceUnits, 'ohm'), false, false)">Resistance</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Capacitance', capacitanceUnits, 'f'), false, false)">Capacitance</button>
+            <button onclick="handleDrawerAction(() => openUnitConverterModal('Amount of Substance', amountOfSubstanceUnits, 'mol'), false, false)">Amount of Sub.</button>
+        </div>
+    </template>
+
+    <template id="moreDrawerPanelTemplate">
+        <div class="drawer-section">
+            <h4 class="drawer-panel-subtitle">Data & History</h4>
+            <div class="drawer-button-panel cols-2">
+                <button onclick="handleDrawerAction(loadHistoryPanel, true)">History</button>
+                <button onclick="handleDrawerAction(loadStatisticsPanel, true)">Statistics</button>
+            </div>
+        </div>
+        <div class="drawer-section">
+            <h4 class="drawer-panel-subtitle">Number Tools</h4>
+            <div class="drawer-button-panel cols-2">
+                <button onclick="handleDrawerAction(loadBaseConverterPanel, true)">Base Converter</button>
+                <button onclick="handleDrawerAction(loadFractionsPanel, true)">Fractions</button>
+            </div>
+        </div>
+    </template>
+
+    <template id="historyDrawerPanelContentTemplate">
+        <div class="history-drawer-panel">
+            <ul id="drawerHistoryList" class="history-list">
+            </ul>
+        </div>
+    </template>
+
+    <template id="baseConverterDrawerPanelContentTemplate">
+        <div class="live-base-converter-panel">
+            <p class="drawer-panel-subtitle">Enter a value in any field for live conversion.</p>
+            <div class="base-input-card">
+                <label for="liveBaseDecimal">Decimal (Base 10)</label>
+                <div class="input-with-copy">
+                    <input type="text" id="liveBaseDecimal" data-base="10" placeholder="e.g., 255">
+                    <button class="copy-btn" title="Copy Decimal" onclick="copyBaseValue('liveBaseDecimal')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <div class="base-input-card">
+                <label for="liveBaseHex">Hexadecimal (Base 16)</label>
+                <div class="input-with-copy">
+                    <input type="text" id="liveBaseHex" data-base="16" placeholder="e.g., FF">
+                    <button class="copy-btn" title="Copy Hex" onclick="copyBaseValue('liveBaseHex')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <div class="base-input-card">
+                <label for="liveBaseOctal">Octal (Base 8)</label>
+                <div class="input-with-copy">
+                    <input type="text" id="liveBaseOctal" data-base="8" placeholder="e.g., 377">
+                    <button class="copy-btn" title="Copy Octal" onclick="copyBaseValue('liveBaseOctal')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <div class="base-input-card">
+                <label for="liveBaseBinary">Binary (Base 2)</label>
+                <div class="input-with-copy">
+                    <input type="text" id="liveBaseBinary" data-base="2" placeholder="e.g., 11111111">
+                    <button class="copy-btn" title="Copy Binary" onclick="copyBaseValue('liveBaseBinary')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="statisticsDrawerPanelContentTemplate">
+        <div class="statistics-drawer-panel">
+            <p class="drawer-panel-subtitle">Enter comma-separated numbers for analysis.</p>
+            <div class="stats-input-area">
+                <label for="statsDataInput">Data Set:</label>
+                <textarea id="statsDataInput" placeholder="e.g., 1.5, 2, 3.14, -4, 5, 2"></textarea>
+                <button id="calculateStatsBtn" class="action-btn">Calculate Statistics</button>
+            </div>
+            <div id="statsResultsArea" class="stats-results-container">
+                <p class="results-placeholder">Results will appear here...</p>
+            </div>
+        </div>
+    </template>
+
+    <template id="fractionsDrawerPanelContentTemplate">
+        <div class="fractions-drawer-panel">
+            <div class="fraction-mode-selection">
+                <button data-mode="arithmetic" class="active">Arithmetic</button>
+                <button data-mode="simplify">Simplify</button>
+                <button data-mode="toFraction">Decimal to Fraction</button>
+            </div>
+            <div id="fractionToolArithmetic" class="fraction-tool-content active">
+                <div class="fraction-section">
+                    <h4>Fraction Operations</h4>
+                    <div class="fraction-input-group">
+                        <label for="fracArith1Input">Fraction 1:</label>
+                        <input type="text" id="fracArith1Input" placeholder="e.g., 1 3/4 or 7/4">
+                    </div>
+                    <div class="fraction-operators">
+                        <button data-op="add" title="Add" class="active">+</button>
+                        <button data-op="subtract" title="Subtract">-</button>
+                        <button data-op="multiply" title="Multiply">×</button>
+                        <button data-op="divide" title="Divide">÷</button>
+                    </div>
+                    <div class="fraction-input-group">
+                        <label for="fracArith2Input">Fraction 2:</label>
+                        <input type="text" id="fracArith2Input" placeholder="e.g., 1/2 or -5">
+                    </div>
+                    <button class="action-btn" id="calculateFractionArithmeticBtn">Calculate Operation</button>
+                    <div class="fraction-result-area">
+                        <p>Improper: <strong id="fracArithResultImproper">N/A</strong></p>
+                        <p>Mixed: <strong id="fracArithResultMixed">N/A</strong></p>
+                        <p>Decimal: <strong id="fracArithResultDecimal">N/A</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div id="fractionToolSimplify" class="fraction-tool-content">
+                <div class="fraction-section">
+                    <h4>Simplify a Fraction</h4>
+                    <div class="fraction-input-group">
+                        <label for="fracSimplifyInput">Enter Fraction:</label>
+                        <input type="text" id="fracSimplifyInput" placeholder="e.g., 10/4 or 2 6/8">
+                    </div>
+                    <button class="action-btn" id="performFractionSimplifyBtn">Simplify</button>
+                    <div class="fraction-result-area">
+                        <p>Simplified Improper: <strong id="fracSimplifyResultImproper">N/A</strong></p>
+                        <p>Simplified Mixed: <strong id="fracSimplifyResultMixed">N/A</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div id="fractionToolToFraction" class="fraction-tool-content">
+                <div class="fraction-section">
+                    <h4>Convert Decimal to Fraction</h4>
+                    <div class="fraction-input-group">
+                        <label for="fracDecimalInput">Enter Decimal:</label>
+                        <input type="text" id="fracDecimalInput" placeholder="e.g., 1.75 or -0.5">
+                    </div>
+                    <button class="action-btn" id="performDecimalToFractionBtn">Convert to Fraction</button>
+                    <div class="fraction-result-area">
+                        <p>Fraction: <strong id="fracToFractionResultImproper">N/A</strong></p>
+                        <p>Mixed: <strong id="fracToFractionResultMixed">N/A</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div id="inputModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Input Required</h3>
+                <button id="modalCloseBtnOnModal" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter">
+                <button id="modalCancelBtn" class="modal-btn modal-btn-secondary">Cancel</button>
+                <button id="modalSubmitBtn" class="modal-btn modal-btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mainDisplay = document.getElementById('mainDisplay');
+        const secondaryDisplay = document.getElementById('secondaryDisplay');
+        const modeIndicator = document.getElementById('modeIndicator');
+        const panelSwitcherButtons = document.querySelectorAll('.panel-switcher button');
+        const sideDrawer = document.getElementById('sideDrawer');
+        const sideDrawerTitle = document.getElementById('sideDrawerTitle');
+        const sideDrawerContent = document.getElementById('sideDrawerContent');
+        const sideDrawerDynamicControls = document.getElementById('sideDrawerDynamicControls');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const toast = document.getElementById('toast');
+        
+        const fabToggleBtn = document.getElementById('fabToggleBtn');
+        const fabMenu = document.getElementById('fabMenu');
+        const fabThemeToggleBtn = document.getElementById('fabThemeToggleBtn');
+        const fabSoundToggleBtn = document.getElementById('fabSoundToggleBtn');
+        const fabDegRadToggleBtn = document.getElementById('fabDegRadToggleBtn');
+        const fabSoundIcon = fabSoundToggleBtn.querySelector('i');
+        const fabAngleTextNode = Array.from(fabDegRadToggleBtn.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.includes('Angle:'));
+
+
+        const inputModalOverlay = document.getElementById('inputModalOverlay');
+        const modalTitleEl = document.getElementById('modalTitle');
+        const modalBodyEl = document.getElementById('modalBody');
+        const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalCloseBtnOnModal = document.getElementById('modalCloseBtnOnModal');
+
+        let currentInput = '0';         
+        let displayValue = '0';         
+        let openBracketCount = 0;
+        let isNewCalculation = true;    
+        let ansValue = 0;               
+        let memoryValue = 0;
+        let calculationHistory = [];
+        const MAX_CALC_HISTORY_ITEMS = 100;
+        let angleMode = 0; 
+        const ANGLE_MODES = ['DEG', 'RAD', 'GRAD'];
+        let isSoundEnabled = true;
+        let currentThemeIndex = 0; 
+        const themes = ['theme-charcoal-amber', 'theme-silver-sky', 'theme-aurora-gradient', 'theme-glass-frost']; 
+        let clickSynth;
+        let currentModalSubmitCallback = null;
+        let currentModalCancelCallback = null;
+        let currentFractionToolMode = 'arithmetic'; 
+        let currentFractionArithmeticOperation = 'add'; 
+
+
+        const PI_CONST = Math.PI;
+        const E_CONST = Math.E;
+        const C_LIGHT = 299792458; 
+        const H_PLANCK = 6.62607015e-34; 
+        const G_GRAV = 6.67430e-11; 
+        const N_AVOGADRO = 6.02214076e23; 
+        const R_GAS = 8.314462618; 
+        const ANS_PLACEHOLDER = 'ANS_VAL_PLACEHOLDER'; 
+
+        function init() {
+            try {
+                 clickSynth = new Tone.Synth({
+                    oscillator: { type: 'triangle8' }, 
+                    envelope: { attack: 0.005, decay: 0.08, sustain: 0.01, release: 0.15 },
+                    volume: -12 
+                }).toDestination();
+            } catch (e) {
+                console.warn("Tone.js synth could not be initialized:", e);
+                isSoundEnabled = false; 
+            }
+            
+            setupAutoThemeDetection(); 
+            loadPreferences(); 
+
+            updateDisplayUI();
+            updateAngleModeUI();
+            updateSoundToggleUI();
+            setupEventListeners();
+            document.getElementById('panelBtnBasic').classList.add('active');
+        }
+        
+        function triggerVibration(duration = 10) {
+            if (navigator.vibrate && isSoundEnabled) { 
+                try { navigator.vibrate(duration); }
+                catch(e) { console.warn("Vibration failed", e); }
+            }
+        }
+
+        function setupEventListeners() {
+            panelSwitcherButtons.forEach(btn => {
+                btn.addEventListener('click', () => { switchPanel(btn.dataset.panelId, btn); triggerVibration(15); });
+            });
+
+            fabToggleBtn.addEventListener('click', toggleFabMenu);
+            fabThemeToggleBtn.addEventListener('click', () => { cycleTheme(); triggerVibration(); });
+            fabSoundToggleBtn.addEventListener('click', () => { toggleSound(); triggerVibration(); });
+            fabDegRadToggleBtn.addEventListener('click', () => { toggleAngleMode(); triggerVibration(); });
+            
+            document.addEventListener('click', (event) => { 
+                if (fabMenu.classList.contains('active') && !fabMenu.contains(event.target) && !fabToggleBtn.contains(event.target)) {
+                    toggleFabMenu(false); 
+                }
+            });
+
+
+            modalSubmitBtn?.addEventListener('click', () => { if (currentModalSubmitCallback) currentModalSubmitCallback(); triggerVibration(); });
+            modalCancelBtn?.addEventListener('click', () => { if (currentModalCancelCallback) currentModalCancelCallback(); hideInputModal(); triggerVibration(); });
+            modalCloseBtnOnModal?.addEventListener('click', () => { if (currentModalCancelCallback) currentModalCancelCallback(); hideInputModal(); triggerVibration(); });
+            inputModalOverlay?.addEventListener('click', (event) => { if (event.target === inputModalOverlay) { if (currentModalCancelCallback) currentModalCancelCallback(); hideInputModal(); triggerVibration();} });
+            
+            window.addEventListener('keydown', handleKeyboardInput);
+            drawerOverlay.addEventListener('click', () => { closeSideDrawer(false); triggerVibration();}); 
+            
+            document.querySelectorAll('.main-calculator-body button').forEach(button => {
+                button.addEventListener('click', () => triggerVibration());
+            });
+            document.querySelectorAll('.drawer-button-panel button').forEach(button => {
+                button.addEventListener('click', () => triggerVibration(12));
+            });
+        }
+        
+        function toggleFabMenu(forceState) {
+            const isActive = fabMenu.classList.toggle('active', forceState);
+            fabToggleBtn.classList.toggle('active', isActive);
+            fabToggleBtn.setAttribute('aria-expanded', isActive);
+            triggerVibration(isActive ? 20 : 10);
+        }
+
+        function updateDisplayUI(pulse = false) {
+            let finalDisplayValue = formatDisplayValueForUI(displayValue);
+            mainDisplay.textContent = finalDisplayValue;
+            if (pulse) {
+                mainDisplay.classList.add('pulse');
+                setTimeout(() => mainDisplay.classList.remove('pulse'), 300);
+            }
+            mainDisplay.scrollLeft = mainDisplay.scrollWidth;
+        }
+
+        function formatDisplayValueForUI(valStr) {
+            if (valStr === null || valStr === undefined) return '0';
+            let str = String(valStr);
+
+            if (str === ANS_PLACEHOLDER) return "ANS";
+            if (["Error", "Infinity", "-Infinity", "NaN"].includes(str) ||
+                str.includes("x₁") || str.includes("root") || str.includes("System") ||
+                str.includes("x=") || str.includes("y=") || str.includes("z=") ||
+                str.includes("GCD") || str.includes("HCF") || str.includes("LCM") ||
+                str.includes("⇒") || str.includes("Fib(") || str.includes("P(") || str.includes("C(")) {
+                return str; 
+            }
+
+            try {
+                if (/^-?\d+(\.\d+)?(e[+\-]?\d+)?$/.test(str) && !str.match(/[^\d.\-eE+]/)) {
+                    const num = parseFloat(str);
+                    if (Math.abs(num) > 1e15 || (Math.abs(num) < 1e-9 && num !== 0)) {
+                        return num.toExponential(6);
+                    }
+                    return num.toLocaleString('en-US', { maximumFractionDigits: 10, useGrouping: false });
+                }
+            } catch (e) {  }
+
+            return str.replace(/\*\*/g, '^')
+                      .replace(/\*/g, '×')
+                      .replace(/\//g, '÷')
+                      .replace(/_mod_/g, ' mod ')
+                      .replace(/PI_CONST/g, 'π')
+                      .replace(/E_CONST/g, 'e')
+                      .replace(/C_LIGHT/g, 'c')
+                      .replace(/H_PLANCK/g, 'h')
+                      .replace(/G_GRAV/g, 'G')
+                      .replace(/N_AVOGADRO/g, 'Nₐ')
+                      .replace(/R_GAS/g, 'R');
+        }
+
+        function updateSecondaryDisplayUI(value = '') {
+            secondaryDisplay.textContent = formatDisplayValueForUI(value);
+            secondaryDisplay.scrollLeft = secondaryDisplay.scrollWidth;
+        }
+
+        function resetForNewCalculationIfNeeded() {
+            if (isNewCalculation) {
+                currentInput = '0';
+                displayValue = '0';
+                openBracketCount = 0;
+                updateSecondaryDisplayUI(); 
+                isNewCalculation = false;
+            }
+        }
+        
+        function handleInitialZeroOrErrorState() {
+            if ((displayValue === '0' && currentInput === '0') || displayValue === 'Error') {
+                displayValue = '';
+                currentInput = '';
+            }
+        }
+
+        function shouldInsertMultiplyBeforeFunctionOrConstant(inputStr) {
+            if (inputStr === '' || inputStr === '0') return false;
+            const lastChar = inputStr.slice(-1);
+            const endsWithPlaceholder = inputStr.endsWith(ANS_PLACEHOLDER) || inputStr.endsWith('PI_CONST') || inputStr.endsWith('E_CONST') || inputStr.endsWith('C_LIGHT') || inputStr.endsWith('H_PLANCK') || inputStr.endsWith('G_GRAV') || inputStr.endsWith('N_AVOGADRO') || inputStr.endsWith('R_GAS');
+            return (/[0-9\)\.\πe]$/.test(lastChar) || endsWithPlaceholder || displayValue.endsWith("ANS"));
+        }
+
+        function appendNumber(numberStr) {
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            currentInput += numberStr;
+            displayValue = currentInput; 
+            updateDisplayUI(true);
+        }
+
+        function appendDecimalPoint() {
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            const segments = currentInput.split(/[\+\-\*\/\(\)\%\!\^\s_mod_]/);
+            const lastSegment = segments[segments.length - 1];
+            if (lastSegment.includes('.')) {
+                showToast('Invalid format: Multiple decimal points.', 'warning');
+                mainDisplay.classList.add('shake');
+                setTimeout(() => mainDisplay.classList.remove('shake'), 400);
+                return;
+            }
+            if (currentInput === '' || /[\+\-\*\/\(\^\%\!_mod_]$/.test(currentInput.slice(-1)) || currentInput.endsWith('(') ) {
+                currentInput += '0.';
+            } else {
+                currentInput += '.';
+            }
+            displayValue = currentInput;
+            updateDisplayUI(true);
+        }
+
+        function appendOperator(op) {
+            if (currentInput === 'Error') currentInput = '0'; 
+            isNewCalculation = false; 
+
+            const operatorsRequiringOperandBefore = ['+', '*', '/', '**', '%', '_mod_'];
+            const lastCharIsOperator = /[\+\-\*\/\^\%_]$/.test(currentInput.slice(-1)) || currentInput.endsWith('**') || currentInput.endsWith('_mod_');
+            
+            if (op === '(') {
+                handleInitialZeroOrErrorState();
+                if (shouldInsertMultiplyBeforeFunctionOrConstant(currentInput)) {
+                    currentInput += '*';
+                }
+                currentInput += '(';
+                openBracketCount++;
+            } else if (op === ')') {
+                if (openBracketCount > 0 && !lastCharIsOperator && currentInput.slice(-1) !== '(') {
+                    currentInput += ')';
+                    openBracketCount--;
+                } else {
+                    showToast('Invalid parenthesis placement.', 'warning'); return;
+                }
+            } else { 
+                 if (currentInput === '0' && displayValue === '0' && op !== '-') {  }
+                 else if (currentInput === '' && op !== '-') {
+                    showToast('Enter a number first.', 'warning'); return;
+                 }
+
+                if (lastCharIsOperator) {
+                    if (!((currentInput.slice(-1) === '*' || currentInput.slice(-1) === '/' || currentInput.endsWith('**') || currentInput.endsWith('_mod_')) && op === '-')) {
+                         if (currentInput.endsWith('**')) currentInput = currentInput.slice(0, -2);
+                         else if (currentInput.endsWith('_mod_')) currentInput = currentInput.slice(0, -5); 
+                         else currentInput = currentInput.slice(0, -1);
+                    }
+                }
+                currentInput += op;
+            }
+            displayValue = currentInput; 
+            updateDisplayUI();
+            updateSecondaryDisplayUI(currentInput); 
+        }
+
+        function appendFunction(funcName) {
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            if (shouldInsertMultiplyBeforeFunctionOrConstant(currentInput)) {
+                currentInput += '*';
+            }
+            currentInput += funcName; 
+            if (funcName.includes('(')) openBracketCount++;
+            displayValue = currentInput;
+            updateDisplayUI(true);
+        }
+
+        function appendConstant(constEval, constDisplaySymbol) {
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            if (shouldInsertMultiplyBeforeFunctionOrConstant(currentInput)) {
+                currentInput += '*';
+            }
+            currentInput += constEval; 
+            displayValue = currentInput; 
+            updateDisplayUI(true);
+        }
+
+        function appendAns() {
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            if (shouldInsertMultiplyBeforeFunctionOrConstant(currentInput)) {
+                currentInput += '*';
+            }
+            currentInput += ANS_PLACEHOLDER;
+            displayValue = currentInput;
+            updateDisplayUI(true);
+        }
+        
+        function applyPostFunction(opEval, opDisplay) { 
+            if (currentInput === '' || currentInput === '0' || isNewCalculation || currentInput === 'Error') {
+                showToast("Enter a number first for " + opDisplay, "warning"); return;
+            }
+            const lastChar = currentInput.slice(-1);
+            if (/[\+\-\*\/\(\^\%\_]$/.test(lastChar) || currentInput.endsWith('(') || currentInput.endsWith('_mod_')) {
+                 showToast("Invalid position for " + opDisplay, "warning"); return;
+            }
+            currentInput += opEval; 
+            displayValue = currentInput;
+            updateDisplayUI(true);
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            displayValue = '0';
+            secondaryDisplay.textContent = '';
+            isNewCalculation = true;
+            openBracketCount = 0;
+            updateDisplayUI();
+            showToast("Calculator Cleared", "info");
+        }
+
+        function deleteChar() {
+            if (isNewCalculation && displayValue !== "Error") { clearAll(); return; }
+            if (displayValue === 'Error') { clearAll(); return; }
+
+            if (currentInput.length > 0 && currentInput !== '0') {
+                let removedSomethingSignificant = false;
+                const placeholders = [ANS_PLACEHOLDER, 'PI_CONST', 'E_CONST', 'C_LIGHT', 'H_PLANCK', 'G_GRAV', 'N_AVOGADRO', 'R_GAS'];
+                for (const p of placeholders) {
+                    if (currentInput.endsWith(p)) {
+                        currentInput = currentInput.slice(0, -p.length);
+                        removedSomethingSignificant = true; break;
+                    }
+                }
+                if (!removedSomethingSignificant) {
+                    const funcMatch = currentInput.match(/(\b(?:sin|cos|tan|asin|acos|atan|sqrt|cbrt|log10|log|exp|abs|round|floor|ceil|sinh|cosh|tanh|asinh|acosh|atanh|pow)\()$/i);
+                    if (funcMatch) {
+                        currentInput = currentInput.slice(0, -funcMatch[1].length);
+                        openBracketCount = Math.max(0, openBracketCount - 1); 
+                        removedSomethingSignificant = true;
+                    }
+                }
+                if (!removedSomethingSignificant) {
+                    if (currentInput.endsWith('**')) { currentInput = currentInput.slice(0, -2); removedSomethingSignificant = true; }
+                    else if (currentInput.endsWith('_mod_')) { currentInput = currentInput.slice(0, -5); removedSomethingSignificant = true; }
+                }
+                if (!removedSomethingSignificant) {
+                    const lastChar = currentInput.slice(-1);
+                    if (lastChar === '(') openBracketCount = Math.max(0, openBracketCount - 1);
+                    else if (lastChar === ')') openBracketCount++; 
+                    currentInput = currentInput.slice(0, -1);
+                }
+
+                if (currentInput === '') {
+                    currentInput = '0'; displayValue = '0'; isNewCalculation = true;
+                } else {
+                    displayValue = currentInput;
+                }
+            } else { 
+                currentInput = '0'; displayValue = '0'; isNewCalculation = true; openBracketCount = 0;
+            }
+            updateDisplayUI();
+            updateSecondaryDisplayUI(currentInput); 
+        }
+
+        function toggleSign() {
+            if (currentInput === '0' || currentInput === 'Error' || isNewCalculation) {
+                currentInput = '-'; displayValue = '-'; isNewCalculation = false;
+                updateDisplayUI(); return;
+            }
+            const match = currentInput.match(/([+\-*/(_mod_\s]|^)(-?\d+\.?\d*(?:e[+\-]?\d+)?)$/);
+            if (match) {
+                let numStr = match[2];
+                if (numStr.startsWith('-')) { numStr = numStr.substring(1); }
+                else { numStr = '-' + numStr; }
+                currentInput = currentInput.substring(0, currentInput.length - match[2].length) + numStr;
+                displayValue = currentInput;
+            } else if (currentInput.startsWith('-')) { 
+                 currentInput = currentInput.substring(1);
+                 displayValue = currentInput;
+            } else { 
+                 currentInput = '-' + currentInput;
+                 displayValue = currentInput;
+            }
+            updateDisplayUI();
+        }
+
+        function calculateResult() {
+            if (currentInput === '' || currentInput === 'Error' || (currentInput === '0' && displayValue === '0' && !secondaryDisplay.textContent.includes("="))) {
+                showToast("No expression to calculate.", "warning"); return;
+            }
+
+            let exprToCalc = currentInput;
+            let displayExprForHist = formatDisplayValueForUI(currentInput); 
+
+            let openBrackets = (exprToCalc.match(/\(/g) || []).length;
+            let closeBrackets = (exprToCalc.match(/\)/g) || []).length;
+            while (openBrackets > closeBrackets) {
+                exprToCalc += ')';
+                displayExprForHist += ')'; 
+                closeBrackets++;
+            }
+            openBracketCount = 0; 
+
+            const lastCharTrimmed = exprToCalc.trim().slice(-1);
+            const endsWithModOp = exprToCalc.trim().endsWith('_mod_');
+            if (['+', '-', '*', '/', '.', '^'].includes(lastCharTrimmed) || exprToCalc.trim().endsWith('**') || endsWithModOp) {
+                 if(!(exprToCalc.trim().length === 1 && ['+', '-'].includes(lastCharTrimmed))) { 
+                    showToast("Invalid format: Expression ends with operator/decimal.", "warning");
+                    mainDisplay.classList.add('shake'); setTimeout(() => mainDisplay.classList.remove('shake'), 400);
+                    return;
+                 }
+            }
+            
+            updateSecondaryDisplayUI(displayExprForHist + " =");
+
+            try {
+                const processedExpression = preprocessForEvaluation(exprToCalc);
+                const result = evaluateExpressionSafely(processedExpression);
+
+                if (isNaN(result)) throw new Error("Result is undefined (NaN)");
+                if (!isFinite(result) && result !== Infinity && result !== -Infinity) throw new Error("Result is invalid or too large");
+
+                const resultForHistory = formatDisplayValueForUI(String(result));
+                currentInput = String(result); 
+                displayValue = resultForHistory; 
+                ansValue = result;
+                localStorage.setItem('swiftcalc_ansValue_v1', ansValue);
+                isNewCalculation = true;
+                updateDisplayUI();
+                addCalculationToHistory(displayExprForHist, resultForHistory); 
+                showToast("Calculation successful.", "success");
+            } catch (error) {
+                console.error("Calculation Error:", error, "Original Expr:", exprToCalc);
+                showToast("Error: " + (error.message || "Invalid Expression"), "error");
+                currentInput = 'Error';
+                displayValue = 'Error';
+                isNewCalculation = true;
+                updateDisplayUI();
+                mainDisplay.classList.add('shake');
+                setTimeout(() => mainDisplay.classList.remove('shake'), 400);
+            }
+        }
+
+        function preprocessForEvaluation(expr) {
+            let processed = expr;
+            processed = processed.replace(new RegExp(ANS_PLACEHOLDER, 'g'), `(${ansValue})`);
+            processed = processed.replace(/π/g, 'PI_CONST');
+            processed = processed.replace(/(?<![a-zA-Z])e(?![a-zA-Z])/g, 'E_CONST'); 
+            processed = processed.replace(/(?<![a-zA-Z])c(?![a-zA-Z])/g, 'C_LIGHT');
+            processed = processed.replace(/(?<![a-zA-Z])h(?![a-zA-Z])/g, 'H_PLANCK');
+            processed = processed.replace(/(?<![a-zA-Z])G(?![a-zA-Z])/g, 'G_GRAV');
+            processed = processed.replace(/Nₐ/g, 'N_AVOGADRO');
+            processed = processed.replace(/(?<![a-zA-Z])R(?![a-zA-Z])/g, 'R_GAS');
+            
+            processed = processed.replace(/(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)|-?\d*\.?\d+(?:e[+\-]?\d+)?(?:PI_CONST|E_CONST|C_LIGHT|H_PLANCK|G_GRAV|N_AVOGADRO|R_GAS|ANS_VAL_PLACEHOLDER)?)\!/g, (match, p1) => `factorial(${p1})`);
+
+            processed = processed.replace(/(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)|-?\d*\.?\d+(?:e[+\-]?\d+)?(?:PI_CONST|E_CONST|C_LIGHT|H_PLANCK|G_GRAV|N_AVOGADRO|R_GAS|ANS_VAL_PLACEHOLDER)?)%/g, '($1/100)');
+            
+            processed = processed.replace(/_mod_/g, '%');
+
+            return processed;
+        }
+        
+        function convertAngle(value, fromMode, toMode) {
+            let valueInRadians;
+            if (fromMode === 0) valueInRadians = value * (PI_CONST / 180); 
+            else if (fromMode === 2) valueInRadians = value * (PI_CONST / 200); 
+            else valueInRadians = value; 
+
+            if (toMode === 0) return valueInRadians * (180 / PI_CONST); 
+            else if (toMode === 2) return valueInRadians * (200 / PI_CONST); 
+            else return valueInRadians; 
+        }
+
+
+        function evaluateExpressionSafely(expr) {
+            const executionScope = {
+                PI_CONST, E_CONST, C_LIGHT, H_PLANCK, G_GRAV, N_AVOGADRO, R_GAS,
+                ANS_VAL_PLACEHOLDER: ansValue, 
+                factorial, 
+                sqrt: Math.sqrt, cbrt: Math.cbrt, abs: Math.abs,
+                log10: Math.log10, log: Math.log, 
+                exp: Math.exp, pow: Math.pow,
+                round: Math.round, floor: Math.floor, ceil: Math.ceil,
+                sin: (x) => Math.sin(convertAngle(x, angleMode, 1)), 
+                cos: (x) => { 
+                    const xRad = convertAngle(x, angleMode, 1);
+                    const cosVal = Math.cos(xRad);
+                    return (Math.abs(xRad % PI_CONST - PI_CONST/2) < 1e-12) ? 0 : cosVal;
+                },
+                tan: (x) => { 
+                    const xRad = convertAngle(x, angleMode, 1);
+                    if (Math.abs(xRad % PI_CONST - PI_CONST/2) < 1e-12) return Infinity; 
+                    return Math.tan(xRad);
+                },
+                asin: (x) => convertAngle(Math.asin(x), 1, angleMode), 
+                acos: (x) => convertAngle(Math.acos(x), 1, angleMode),
+                atan: (x) => convertAngle(Math.atan(x), 1, angleMode),
+                sinh: Math.sinh, cosh: Math.cosh, tanh: Math.tanh,
+                asinh: Math.asinh, acosh: Math.acosh, atanh: Math.atanh,
+            };
+            const allowedCharsPattern = /[^a-zA-Z0-9\s\.\(\)\+\-\*\/\%\^\!\_\<\>\=\&\|\~\?]/g;
+            const sanitizedExpr = String(expr).replace(allowedCharsPattern, '');
+
+            if (sanitizedExpr.includes('ANS_VAL_PLACEHOLDER')) { 
+                throw new Error("Internal error: ANS placeholder not replaced.");
+            }
+
+            const func = new Function(...Object.keys(executionScope), `"use strict"; return ${sanitizedExpr};`);
+            return func.apply(null, Object.values(executionScope));
+        }
+
+        function factorial(nStr) {
+            let n;
+            if (isNaN(parseFloat(nStr))) { 
+                try { n = evaluateExpressionSafely(preprocessForEvaluation(String(nStr))); }
+                catch (e) { throw new Error("Invalid input for factorial (sub-expression failed)."); }
+            } else {
+                n = parseFloat(nStr);
+            }
+
+            if (isNaN(n)) throw new Error("Invalid input for factorial.");
+            if (n < 0) throw new Error("Factorial of negative number is undefined.");
+            if (n > 170) throw new Error("Factorial overflow (input too large)."); 
+            if (!Number.isInteger(n)) throw new Error("Factorial of non-integer is not supported here.");
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) result *= i;
+            return result;
+        }
+        
+        function reciprocal() {
+            if (currentInput === '0' || currentInput === '' || isNewCalculation || currentInput === 'Error') {
+                showToast("Error: Cannot divide by zero or invalid input.", "error");
+                currentInput = 'Error'; displayValue = 'Error'; updateDisplayUI(); isNewCalculation = true; return;
+            }
+            try {
+                const processedForEval = preprocessForEvaluation(currentInput);
+                const valToRecip = evaluateExpressionSafely(processedForEval);
+                if (valToRecip === 0) throw new Error("Division by zero");
+                if (isNaN(valToRecip) || !isFinite(valToRecip)) throw new Error("Invalid input for reciprocal");
+
+                const result = 1 / valToRecip;
+                const expressionForHistory = `1/(${formatDisplayValueForUI(currentInput)})`;
+                const resultForHistory = formatDisplayValueForUI(String(result));
+
+                updateSecondaryDisplayUI(`${expressionForHistory} = ${resultForHistory}`);
+                currentInput = String(result);
+                displayValue = resultForHistory;
+                ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue);
+                isNewCalculation = true; openBracketCount = 0;
+                updateDisplayUI();
+                addCalculationToHistory(expressionForHistory, resultForHistory);
+                showToast("Reciprocal calculated.", "success");
+            } catch (error) {
+                showToast("Reciprocal Error: " + (error.message || "Invalid input"), "error");
+                currentInput = 'Error'; displayValue = 'Error'; updateDisplayUI(); isNewCalculation = true;
+            }
+        }
+
+        function applyTenPowerX() {
+            if (currentInput === 'Error' || currentInput === '') {
+                showToast("Invalid input for 10^x.", "error"); return;
+            }
+            try {
+                let baseValueStr = currentInput;
+                const processedBase = preprocessForEvaluation(baseValueStr);
+                const baseNum = evaluateExpressionSafely(processedBase);
+                if (isNaN(baseNum) || !isFinite(baseNum)) throw new Error("Base for 10^x is not a valid number.");
+
+                const result = Math.pow(10, baseNum);
+                const expressionForHistory = `10^(${formatDisplayValueForUI(String(baseNum))})`;
+                const resultForHistory = formatDisplayValueForUI(String(result));
+
+                updateSecondaryDisplayUI(`${expressionForHistory} = ${resultForHistory}`);
+                currentInput = String(result); displayValue = resultForHistory;
+                ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue);
+                isNewCalculation = true; openBracketCount = 0; updateDisplayUI();
+                addCalculationToHistory(expressionForHistory, resultForHistory);
+                showToast("10^x calculated.", "success");
+            } catch (error) {
+                showToast("10^x Error: " + (error.message || "Invalid input"), "error");
+                currentInput = 'Error'; displayValue = 'Error'; updateDisplayUI(); isNewCalculation = true;
+            }
+        }
+        
+        function insertRandom() {
+            const rand = Math.random();
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            if (shouldInsertMultiplyBeforeFunctionOrConstant(currentInput)) {
+                currentInput += '*';
+            }
+            currentInput += String(rand);
+            displayValue = currentInput;
+            isNewCalculation = false; 
+            updateDisplayUI(true);
+        }
+
+
+        function memoryStore() {
+            try {
+                const valToStore = evaluateExpressionSafely(preprocessForEvaluation(currentInput));
+                if (isNaN(valToStore) || !isFinite(valToStore)) {
+                    showToast("Cannot store invalid result.", "error"); return;
+                }
+                memoryValue = valToStore;
+                localStorage.setItem('swiftcalc_memory_v1', memoryValue);
+                showToast(`Stored: ${formatDisplayValueForUI(String(memoryValue))}`, "success");
+            } catch (e) {
+                showToast("MS Error: Could not evaluate current input.", "error");
+            }
+        }
+        function memoryRecall() {
+            resetForNewCalculationIfNeeded();
+            handleInitialZeroOrErrorState();
+            if (shouldInsertMultiplyBeforeFunctionOrConstant(currentInput)) {
+                currentInput += '*';
+            }
+            currentInput += String(memoryValue); 
+            displayValue = currentInput; 
+            updateDisplayUI(true);
+            showToast(`Recalled: ${formatDisplayValueForUI(String(memoryValue))}`, "info");
+        }
+        function memoryClear() {
+            memoryValue = 0;
+            localStorage.setItem('swiftcalc_memory_v1', memoryValue);
+            showToast("Memory Cleared", "info");
+        }
+        function memoryAdd() {
+            try {
+                const currentVal = evaluateExpressionSafely(preprocessForEvaluation(currentInput));
+                if (isNaN(currentVal) || !isFinite(currentVal)) {
+                    showToast("Cannot add invalid result to memory.", "error"); return;
+                }
+                memoryValue += currentVal;
+                localStorage.setItem('swiftcalc_memory_v1', memoryValue);
+                showToast(`${formatDisplayValueForUI(String(currentVal))} Added. M: ${formatDisplayValueForUI(String(memoryValue))}`, "success");
+            } catch (e) {
+                showToast("M+ Error: Could not evaluate input.", "error");
+            }
+        }
+        
+        function addCalculationToHistory(expressionStr, resultStr) {
+            if (!expressionStr || !resultStr || resultStr === "Error" || resultStr.includes("NaN") || resultStr.includes("Infinity")) return;
+            const newEntry = {
+                id: `calc_${new Date().getTime()}_${Math.random().toString(36).substring(2, 7)}`,
+                expression: expressionStr,
+                result: resultStr,
+                timestamp: new Date().toISOString()
+            };
+            calculationHistory.unshift(newEntry);
+            if (calculationHistory.length > MAX_CALC_HISTORY_ITEMS) {
+                calculationHistory.pop();
+            }
+            localStorage.setItem('swiftcalc_calcHistory_v1', JSON.stringify(calculationHistory));
+            if (sideDrawer.classList.contains('open') && sideDrawerTitle.textContent === 'History') {
+                renderHistoryInDrawer();
+            }
+        }
+        
+        function loadHistoryPanel() {
+            sideDrawerTitle.textContent = 'History';
+            const template = document.getElementById('historyDrawerPanelContentTemplate');
+            sideDrawerContent.innerHTML = '';
+            sideDrawerContent.appendChild(template.content.cloneNode(true));
+            renderHistoryInDrawer();
+            sideDrawerDynamicControls.innerHTML = ''; 
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'control-btn'; 
+            clearBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Clear';
+            clearBtn.title = 'Clear All History';
+            clearBtn.onclick = confirmClearAllCalcHistory;
+            sideDrawerDynamicControls.appendChild(clearBtn);
+        }
+
+        function renderHistoryInDrawer() {
+            const historyListEl = sideDrawerContent.querySelector('#drawerHistoryList');
+            if (!historyListEl) return;
+            historyListEl.innerHTML = ''; 
+
+            if (calculationHistory.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'Calculation history is empty.';
+                Object.assign(li.style, { textAlign: 'center', padding: '15px', fontStyle: 'italic', color: 'var(--text-secondary-color)', justifyContent: 'center', borderBottom: 'none', background: 'transparent', boxShadow: 'none' });
+                historyListEl.appendChild(li);
+                return;
+            }
+
+            calculationHistory.forEach(item => {
+                const li = document.createElement('li');
+                li.dataset.id = item.id;
+                li.title = `Expression: ${item.expression}\nResult: ${item.result}`;
+
+                const textContainer = document.createElement('div');
+                textContainer.className = 'history-entry-text';
+
+                const exprDiv = document.createElement('div');
+                exprDiv.className = 'history-expression';
+                exprDiv.textContent = item.expression;
+
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'history-result';
+                resultDiv.textContent = `= ${item.result}`;
+
+                textContainer.appendChild(exprDiv);
+                textContainer.appendChild(resultDiv);
+
+                li.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('history-delete-btn') || e.target.closest('.history-delete-btn')) return;
+                    
+                    showInputModal(
+                        "Reuse History Entry",
+                        [
+                            { type: 'paragraph', text: `Expression: ${item.expression}`},
+                            { type: 'paragraph', text: `Result: ${item.result}`}
+                        ],
+                        () => { 
+                            clearAll();
+                            currentInput = preprocessForInputReuse(item.expression); 
+                            displayValue = item.expression; 
+                            isNewCalculation = false;
+                            openBracketCount = (currentInput.match(/\(/g) || []).length - (currentInput.match(/\)/g) || []).length;
+                            updateDisplayUI();
+                            updateSecondaryDisplayUI(currentInput);
+                            hideInputModal();
+                            returnToBasicView();
+                            showToast("Expression loaded.", "info");
+                        },
+                        () => { 
+                            clearAll();
+                            currentInput = String(item.result); 
+                            try { 
+                                const parsedResult = parseFloat(item.result.replace(/[^\d.\-eE]/g, ''));
+                                if (!isNaN(parsedResult)) currentInput = String(parsedResult);
+                            } catch(_) {}
+                            displayValue = item.result; 
+                            isNewCalculation = true; 
+                            updateDisplayUI();
+                            updateSecondaryDisplayUI('');
+                            hideInputModal();
+                            returnToBasicView();
+                            showToast("Result loaded.", "info");
+                        },
+                        "Use Expression", "Use Result"
+                    );
+                });
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'history-delete-btn';
+                deleteBtn.innerHTML = '&times;';
+                deleteBtn.title = 'Delete this entry';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removeCalculationHistoryItem(item.id);
+                });
+
+                li.appendChild(textContainer);
+                li.appendChild(deleteBtn);
+                historyListEl.appendChild(li);
+            });
+        }
+        
+        function preprocessForInputReuse(displayExpression) {
+            let evalStr = displayExpression;
+            evalStr = evalStr.replace(/×/g, '*').replace(/÷/g, '/');
+            evalStr = evalStr.replace(/ mod /g, '_mod_');
+            evalStr = evalStr.replace(/π/g, 'PI_CONST');
+            evalStr = evalStr.replace(/(?<![a-zA-Z])e(?![a-zA-Z])/g, 'E_CONST');
+            evalStr = evalStr.replace(/(?<![a-zA-Z])c(?![a-zA-Z])/g, 'C_LIGHT');
+            evalStr = evalStr.replace(/(?<![a-zA-Z])h(?![a-zA-Z])/g, 'H_PLANCK');
+            evalStr = evalStr.replace(/(?<![a-zA-Z])G(?![a-zA-Z])/g, 'G_GRAV');
+            evalStr = evalStr.replace(/Nₐ/g, 'N_AVOGADRO');
+            evalStr = evalStr.replace(/(?<![a-zA-Z])R(?![a-zA-Z])/g, 'R_GAS');
+            evalStr = evalStr.replace(/ln\(/g, 'log('); 
+            evalStr = evalStr.replace(/log₁₀\(/g, 'log10(');
+            evalStr = evalStr.replace(/√\(/g, 'sqrt(');
+            evalStr = evalStr.replace(/³√\(/g, 'cbrt(');
+            evalStr = evalStr.replace(/sin⁻¹\(/g, 'asin(');
+            evalStr = evalStr.replace(/cos⁻¹\(/g, 'acos(');
+            evalStr = evalStr.replace(/tan⁻¹\(/g, 'atan(');
+            evalStr = evalStr.replace(/sinh⁻¹\(/g, 'asinh(');
+            evalStr = evalStr.replace(/cosh⁻¹\(/g, 'acosh(');
+            evalStr = evalStr.replace(/tanh⁻¹\(/g, 'atanh(');
+            evalStr = evalStr.replace(/eˣ\(/g, 'exp(');
+            return evalStr;
+        }
+
+
+        function removeCalculationHistoryItem(id) {
+            calculationHistory = calculationHistory.filter(item => item.id !== id);
+            localStorage.setItem('swiftcalc_calcHistory_v1', JSON.stringify(calculationHistory));
+            renderHistoryInDrawer(); 
+            showToast('History entry removed.', 'info');
+        }
+
+        function confirmClearAllCalcHistory() {
+            if (calculationHistory.length === 0) {
+                showToast('History is already empty.', 'info'); return;
+            }
+            showConfirmationModal(
+                "Confirm Clear History",
+                "Are you sure you want to clear all calculation history? This cannot be undone.",
+                () => { 
+                    calculationHistory = [];
+                    localStorage.removeItem('swiftcalc_calcHistory_v1');
+                    renderHistoryInDrawer();
+                    showToast('Calculation history cleared.', 'success');
+                    hideInputModal();
+                },
+                () => { 
+                    showToast('Clear history cancelled.', 'info');
+                    hideInputModal();
+                }
+            );
+        }
+        
+        function setupAutoThemeDetection() {
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+            const savedTheme = localStorage.getItem('swiftcalc_theme_v2'); 
+
+            if (!savedTheme) { 
+                if (prefersDarkScheme.matches) {
+                    applyTheme('theme-charcoal-amber', false); 
+                    currentThemeIndex = themes.indexOf('theme-charcoal-amber');
+                } else {
+                    applyTheme('theme-silver-sky', false); 
+                    currentThemeIndex = themes.indexOf('theme-silver-sky');
+                }
+            } else {
+            }
+
+            prefersDarkScheme.addEventListener("change", (e) => {
+                const userHasManuallySelectedTheme = !!localStorage.getItem('swiftcalc_theme_v2');
+                if (!userHasManuallySelectedTheme) { 
+                    if (e.matches) {
+                        applyTheme('theme-charcoal-amber', false);
+                        currentThemeIndex = themes.indexOf('theme-charcoal-amber');
+                    } else {
+                        applyTheme('theme-silver-sky', false);
+                        currentThemeIndex = themes.indexOf('theme-silver-sky');
+                    }
+                }
+            });
+        }
+
+
+        function loadPreferences() {
+            const savedThemeName = localStorage.getItem('swiftcalc_theme_v2');
+            if (savedThemeName && themes.includes(savedThemeName)) {
+                currentThemeIndex = themes.indexOf(savedThemeName);
+                applyTheme(savedThemeName, false); 
+            } else {
+                if(!document.body.className.includes('theme-')) { 
+                    applyTheme(themes[0], false); 
+                    currentThemeIndex = 0;
+                }
+            }
+            
+            isSoundEnabled = localStorage.getItem('swiftcalc_soundEnabled_v1') !== 'false';
+            angleMode = parseInt(localStorage.getItem('swiftcalc_angleMode_v1')) || 0;
+            memoryValue = parseFloat(localStorage.getItem('swiftcalc_memory_v1')) || 0;
+            calculationHistory = JSON.parse(localStorage.getItem('swiftcalc_calcHistory_v1')) || [];
+            ansValue = parseFloat(localStorage.getItem('swiftcalc_ansValue_v1')) || 0;
+        }
+
+        function toggleSound() {
+            isSoundEnabled = !isSoundEnabled;
+            localStorage.setItem('swiftcalc_soundEnabled_v1', isSoundEnabled);
+            updateSoundToggleUI();
+            showToast(isSoundEnabled ? "Sound On" : "Sound Off", "info");
+            if (isSoundEnabled) playClickSound(); 
+        }
+        function updateSoundToggleUI() {
+            if (fabSoundIcon) {
+                fabSoundIcon.className = isSoundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            }
+        }
+
+        function toggleAngleMode() {
+            angleMode = (angleMode + 1) % ANGLE_MODES.length;
+            localStorage.setItem('swiftcalc_angleMode_v1', angleMode);
+            updateAngleModeUI();
+            showToast(`${ANGLE_MODES[angleMode]} Mode`, "info");
+        }
+        function updateAngleModeUI() {
+            if (modeIndicator) modeIndicator.textContent = ANGLE_MODES[angleMode];
+            if (fabAngleTextNode) fabAngleTextNode.textContent = `Angle: ${ANGLE_MODES[angleMode]}`;
+        }
+
+        function cycleTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            applyTheme(themes[currentThemeIndex]); 
+        }
+        
+        function applyTheme(themeClassName, savePreference = true) {
+            document.body.className = ''; 
+            document.body.classList.add(themeClassName);
+            if (savePreference) {
+                localStorage.setItem('swiftcalc_theme_v2', themeClassName);
+            }
+            const appliedThemeIndex = themes.indexOf(themeClassName);
+            if (appliedThemeIndex !== -1) {
+                currentThemeIndex = appliedThemeIndex;
+            }
+            showToast(`Theme: ${themeClassName.replace('theme-', '').replace(/-/g, ' ')}`, "info", 1500);
+        }
+        
+        function playClickSound() {
+            if (isSoundEnabled && clickSynth) {
+                try { clickSynth.triggerAttackRelease("C#5", "0.05"); } 
+                catch (e) { console.warn("Failed to play sound:", e); }
+            }
+        }
+        
+        function returnToBasicView() {
+            closeSideDrawer(false); 
+            panelSwitcherButtons.forEach(btn => btn.classList.remove('active'));
+            const basicBtn = document.getElementById('panelBtnBasic');
+            if (basicBtn) basicBtn.classList.add('active');
+        }
+
+
+        function switchPanel(panelId, clickedButton) {
+            playClickSound();
+            panelSwitcherButtons.forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+            sideDrawerDynamicControls.innerHTML = ''; 
+
+            if (panelId === 'basicOpsPanel') { 
+                closeSideDrawer(false); 
+                return;
+            }
+
+            sideDrawerContent.innerHTML = ''; 
+            let templateId = '';
+            let panelTitle = clickedButton.textContent;
+
+            if (panelId === 'scientificDrawerPanel') templateId = 'scientificDrawerPanelTemplate';
+            else if (panelId === 'converterDrawerPanel') templateId = 'converterDrawerPanelTemplate';
+            else if (panelId === 'moreDrawerPanel') {
+                templateId = 'moreDrawerPanelTemplate'; 
+                panelTitle = 'More Tools';
+            }
+            else if (panelId === 'historyDrawerPanelContent') { loadHistoryPanel(); openSideDrawer(); return; }
+            else if (panelId === 'baseConverterDrawerPanelContent') { loadBaseConverterPanel(); openSideDrawer(); return; }
+            else if (panelId === 'statisticsDrawerPanelContent') { loadStatisticsPanel(); openSideDrawer(); return; }
+            else if (panelId === 'fractionsDrawerPanelContent') { loadFractionsPanel(); openSideDrawer(); return; }
+
+
+            if (templateId) {
+                const template = document.getElementById(templateId);
+                if (template) {
+                    sideDrawerContent.appendChild(template.content.cloneNode(true));
+                    sideDrawerTitle.textContent = panelTitle;
+                    openSideDrawer();
+                } else {
+                    console.error("Template not found for panelId:", panelId);
+                    showToast("Could not load panel.", "error");
+                }
+            } else if (panelId !== 'basicOpsPanel') { 
+            }
+        }
+
+        function openSideDrawer() {
+            sideDrawer.classList.add('open');
+            drawerOverlay.classList.add('active');
+        }
+        function closeSideDrawer(resetActiveTabToBasic = true) {
+            sideDrawer.classList.remove('open');
+            drawerOverlay.classList.remove('active');
+            if (resetActiveTabToBasic) {
+                const currentActiveButton = document.querySelector('.panel-switcher button.active');
+                if (currentActiveButton && currentActiveButton.id !== 'panelBtnBasic') {
+                    currentActiveButton.classList.remove('active');
+                    document.getElementById('panelBtnBasic').classList.add('active');
+                }
+            }
+        }
+        
+        function loadBaseConverterPanel() {
+            sideDrawerTitle.textContent = 'Base Converter';
+            const template = document.getElementById('baseConverterDrawerPanelContentTemplate');
+            sideDrawerContent.innerHTML = '';
+            sideDrawerContent.appendChild(template.content.cloneNode(true));
+            setupLiveBaseConverterInputs();
+        }
+        function loadStatisticsPanel() {
+            sideDrawerTitle.textContent = 'Statistics';
+            const template = document.getElementById('statisticsDrawerPanelContentTemplate');
+            sideDrawerContent.innerHTML = '';
+            sideDrawerContent.appendChild(template.content.cloneNode(true));
+            setupStatisticsPanelListeners();
+        }
+        function loadFractionsPanel() {
+            sideDrawerTitle.textContent = 'Fraction Tools';
+            const template = document.getElementById('fractionsDrawerPanelContentTemplate');
+            sideDrawerContent.innerHTML = '';
+            sideDrawerContent.appendChild(template.content.cloneNode(true));
+            setupFractionsPanelListeners();
+        }
+
+        function handleDrawerAction(actionFunction, isPanelLoader = false, closesDrawerAndResetsToBasic = true) {
+            if (typeof actionFunction === 'function') {
+                actionFunction();
+                if (!isPanelLoader && closesDrawerAndResetsToBasic) {
+                    returnToBasicView();
+                }
+            }
+        }
+
+        function showToast(message, type = 'info', duration = 2500) {
+            toast.textContent = message;
+            toast.className = 'toast show ' + type; 
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        function showInputModal(title, fieldsConfig, onSubmit, onCancel, submitText = "Submit", cancelText = "Cancel") {
+            modalTitleEl.textContent = title;
+            modalBodyEl.innerHTML = ''; 
+            modalBodyEl.className = 'modal-body'; 
+            if (title === 'Unit Converter') modalBodyEl.classList.add('unit-converter-modal-body');
+
+
+            fieldsConfig.forEach(fieldConfig => {
+                const label = document.createElement('label');
+                label.htmlFor = fieldConfig.id;
+                label.textContent = fieldConfig.label;
+                let inputElement;
+
+                if (fieldConfig.type === 'select') {
+                    inputElement = document.createElement('select');
+                    inputElement.id = fieldConfig.id;
+                    (fieldConfig.options || []).forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt.value; option.textContent = opt.text;
+                        if (opt.selected) option.selected = true;
+                        inputElement.appendChild(option);
+                    });
+                    if (fieldConfig.onchange) inputElement.addEventListener('change', fieldConfig.onchange);
+                } else if (fieldConfig.type === 'textarea') {
+                    inputElement = document.createElement('textarea');
+                    inputElement.id = fieldConfig.id;
+                    inputElement.placeholder = fieldConfig.placeholder || '';
+                    if (fieldConfig.value) inputElement.value = fieldConfig.value;
+                } else if (fieldConfig.type === 'paragraph') {
+                    const p = document.createElement('p'); p.textContent = fieldConfig.text; modalBodyEl.appendChild(p); return; 
+                } else { 
+                    inputElement = document.createElement('input');
+                    inputElement.type = fieldConfig.type || 'text';
+                    inputElement.id = fieldConfig.id;
+                    inputElement.placeholder = fieldConfig.placeholder || '';
+                    if (fieldConfig.value) inputElement.value = fieldConfig.value;
+                    if (fieldConfig.pattern) inputElement.pattern = fieldConfig.pattern;
+                    if (fieldConfig.required) inputElement.required = true;
+                    if (fieldConfig.oninput) inputElement.addEventListener('input', fieldConfig.oninput);
+                }
+                
+                if (modalBodyEl.classList.contains('unit-converter-modal-body') && (fieldConfig.id === 'fromUnitSelect' || fieldConfig.id === 'toUnitSelect')) {
+                    let groupDiv = modalBodyEl.querySelector('.select-group');
+                    if (!groupDiv) {
+                        groupDiv = document.createElement('div'); groupDiv.className = 'select-group';
+                        modalBodyEl.appendChild(groupDiv);
+                    }
+                    const individualSelectDiv = document.createElement('div');
+                    individualSelectDiv.appendChild(label); individualSelectDiv.appendChild(inputElement);
+                    groupDiv.appendChild(individualSelectDiv);
+                } else if (modalBodyEl.classList.contains('unit-converter-modal-body') && fieldConfig.id === 'convertValueInput') {
+                     const inputGroupDiv = document.createElement('div'); inputGroupDiv.className = 'input-group';
+                     inputGroupDiv.appendChild(label); inputGroupDiv.appendChild(inputElement);
+                     modalBodyEl.appendChild(inputGroupDiv);
+                } else {
+                    modalBodyEl.appendChild(label); modalBodyEl.appendChild(inputElement);
+                }
+            });
+            
+             if (fieldsConfig.some(f => f.id === 'conversionResultDisplay')) {
+                const resultDiv = document.createElement('div');
+                resultDiv.id = 'conversionResultDisplay';
+                resultDiv.textContent = 'Select units...'; 
+                modalBodyEl.appendChild(resultDiv);
+            }
+
+
+            currentModalSubmitCallback = () => {
+                const values = {}; let allValid = true;
+                fieldsConfig.forEach(fieldConfig => {
+                    if (fieldConfig.type === 'paragraph' || fieldConfig.id === 'conversionResultDisplay') return; 
+                    const inputEl = document.getElementById(fieldConfig.id);
+                    if (inputEl.checkValidity()) { values[fieldConfig.id] = inputEl.value; }
+                    else { allValid = false; inputEl.reportValidity(); } 
+                });
+                if (allValid && onSubmit) {
+                    onSubmit(values);
+                    
+                } else if (!allValid) {
+                     showToast("Please correct the highlighted fields.", "warning");
+                }
+            };
+            currentModalCancelCallback = onCancel; 
+
+            modalSubmitBtn.textContent = submitText;
+            modalCancelBtn.textContent = cancelText;
+            inputModalOverlay.classList.add('active');
+
+            const firstFocusable = fieldsConfig.find(f => f.type !== 'paragraph' && f.id);
+            if (firstFocusable) {
+                setTimeout(() => document.getElementById(firstFocusable.id)?.focus(), 50);
+            }
+            playClickSound();
+        }
+
+        function hideInputModal() {
+            inputModalOverlay.classList.remove('active');
+            currentModalSubmitCallback = null;
+            currentModalCancelCallback = null; 
+            playClickSound();
+        }
+        
+        function showConfirmationModal(title, message, onConfirm, onCancel, confirmText = "Confirm", cancelText = "Cancel") {
+            showInputModal(title, [{type: 'paragraph', text: message}], onConfirm, onCancel, confirmText, cancelText);
+        }
+
+        const tempUnits = {'c':{symbol:'°C',toBase:v=>v,fromBase:v=>v},'f':{symbol:'°F',toBase:v=>(v-32)*5/9,fromBase:v=>(v*9/5)+32},'k':{symbol:'K',toBase:v=>v-273.15,fromBase:v=>v+273.15}};
+        const lengthUnits = {'m':{symbol:"m",toBase:1,fromBase:1},'km':{symbol:"km",toBase:1000,fromBase:1/1000},'cm':{symbol:"cm",toBase:0.01,fromBase:100},'mm':{symbol:"mm",toBase:0.001,fromBase:1000},'mi':{symbol:"mi",toBase:1609.34,fromBase:1/1609.34},'yd':{symbol:"yd",toBase:0.9144,fromBase:1/0.9144},'ft':{symbol:"ft",toBase:0.3048,fromBase:1/0.3048},'in':{symbol:"in",toBase:0.0254,fromBase:1/0.0254},'µm':{symbol:"µm",toBase:1e-6,fromBase:1e6},'nm':{symbol:"nm",toBase:1e-9,fromBase:1e9},'nmi':{symbol:"nmi",toBase:1852,fromBase:1/1852}};
+        const weightUnits = {'kg':{symbol:"kg",toBase:1,fromBase:1},'g':{symbol:"g",toBase:0.001,fromBase:1000},'mg':{symbol:"mg",toBase:1e-6,fromBase:1e6},'lb':{symbol:"lb",toBase:0.45359237,fromBase:1/0.45359237},'oz':{symbol:"oz",toBase:0.0283495,fromBase:1/0.0283495},'t':{symbol:"tonne",toBase:1000,fromBase:0.001},'st':{symbol:"st",toBase:6.35029,fromBase:1/6.35029}};
+        const timeUnits = {'s':{symbol:"s",toBase:1,fromBase:1},'ms':{symbol:"ms",toBase:0.001,fromBase:1000},'min':{symbol:"min",toBase:60,fromBase:1/60},'hr':{symbol:"hr",toBase:3600,fromBase:1/3600},'day':{symbol:"day",toBase:86400,fromBase:1/86400},'wk':{symbol:"wk",toBase:604800,fromBase:1/604800},'mo':{symbol:"mo (avg)",toBase:2629800,fromBase:1/2629800},'yr':{symbol:"yr (avg)",toBase:31557600,fromBase:1/31557600}};
+        const areaUnits = {'m2':{symbol:"m²",toBase:1,fromBase:1},'km2':{symbol:"km²",toBase:1e6,fromBase:1e-6},'cm2':{symbol:"cm²",toBase:1e-4,fromBase:1e4},'mm2':{symbol:"mm²",toBase:1e-6,fromBase:1e6},'ha':{symbol:"ha",toBase:10000,fromBase:1e-4},'ac':{symbol:"acre",toBase:4046.86,fromBase:1/4046.86},'mi2':{symbol:"mi²",toBase:2.59e6,fromBase:1/2.59e6},'ft2':{symbol:"ft²",toBase:0.092903,fromBase:1/0.092903},'in2':{symbol:"in²",toBase:0.00064516,fromBase:1/0.00064516}};
+        const volumeUnits = {'m3':{symbol:"m³",toBase:1,fromBase:1},'l':{symbol:"L",toBase:0.001,fromBase:1000},'ml':{symbol:"mL",toBase:1e-6,fromBase:1e6},'gal':{symbol:"gal (US)",toBase:0.00378541,fromBase:1/0.00378541},'qt':{symbol:"qt (US)",toBase:0.000946353,fromBase:1/0.000946353},'pt':{symbol:"pt (US)",toBase:0.000473176,fromBase:1/0.000473176},'floz':{symbol:"fl oz (US)",toBase:2.95735e-5,fromBase:1/2.95735e-5},'ft3':{symbol:"ft³",toBase:0.0283168,fromBase:1/0.0283168}};
+        const speedUnits = {'mps':{symbol:"m/s",toBase:1,fromBase:1},'kph':{symbol:"km/h",toBase:1/3.6,fromBase:3.6},'mph':{symbol:"mph",toBase:0.44704,fromBase:1/0.44704},'fps':{symbol:"ft/s",toBase:0.3048,fromBase:1/0.3048},'kn':{symbol:"knot",toBase:0.514444,fromBase:1/0.514444}};
+        const pressureUnits = {'pa':{symbol:"Pa",toBase:1,fromBase:1},'kpa':{symbol:"kPa",toBase:1000,fromBase:0.001},'bar':{symbol:"bar",toBase:100000,fromBase:1e-5},'atm':{symbol:"atm",toBase:101325,fromBase:1/101325},'psi':{symbol:"psi",toBase:6894.76,fromBase:1/6894.76},'torr':{symbol:"Torr",toBase:133.322,fromBase:1/133.322}};
+        const energyUnits = {'j':{symbol:"J",toBase:1,fromBase:1},'kj':{symbol:"kJ",toBase:1000,fromBase:0.001},'cal':{symbol:"cal",toBase:4.184,fromBase:1/4.184},'kcal':{symbol:"kcal",toBase:4184,fromBase:1/4184},'wh':{symbol:"Wh",toBase:3600,fromBase:1/3600},'kwh':{symbol:"kWh",toBase:3.6e6,fromBase:1/3.6e6},'ev':{symbol:"eV",toBase:1.60218e-19,fromBase:1/1.60218e-19},'btu':{symbol:"BTU",toBase:1055.06,fromBase:1/1055.06}};
+        const powerUnits = {'w':{symbol:"W",toBase:1,fromBase:1},'kw':{symbol:"kW",toBase:1000,fromBase:0.001},'mw':{symbol:"MW",toBase:1e6,fromBase:1e-6},'hp':{symbol:"hp (mech)",toBase:745.7,fromBase:1/745.7}};
+        const dataUnits = {'b':{symbol:"b",toBase:1,fromBase:1},'B':{symbol:"B",toBase:8,fromBase:1/8},'kb':{symbol:"kb",toBase:1000,fromBase:1/1000},'kB':{symbol:"kB",toBase:8000,fromBase:1/8000},'Mb':{symbol:"Mb",toBase:1e6,fromBase:1e-6},'MB':{symbol:"MB",toBase:8e6,fromBase:1/8e6},'Gb':{symbol:"Gb",toBase:1e9,fromBase:1e-9},'GB':{symbol:"GB",toBase:8e9,fromBase:1/8e9},'Tb':{symbol:"Tb",toBase:1e12,fromBase:1e-12},'TB':{symbol:"TB",toBase:8e12,fromBase:1/8e12}};
+        const fuelEconomyUnits = {'l100km':{symbol:"L/100km",toBase:v=>v,fromBase:v=>v},'mpg':{symbol:"mpg (US)",toBase:v=>v===0?Infinity:235.215/v,fromBase:baseVal=>baseVal===0?Infinity:235.215/baseVal},'kpl':{symbol:"km/L",toBase:v=>v===0?Infinity:100/v,fromBase:baseVal=>baseVal===0?Infinity:100/baseVal}};
+        const angleUnits = {'rad':{symbol:"rad",toBase:1,fromBase:1},'deg':{symbol:"°",toBase:(PI_CONST/180),fromBase:(180/PI_CONST)},'grad':{symbol:"grad",toBase:(PI_CONST/200),fromBase:(200/PI_CONST)},'arcmin':{symbol:"'",toBase:(PI_CONST/(180*60)),fromBase:((180*60)/PI_CONST)},'arcsec':{symbol:"\"",toBase:(PI_CONST/(180*3600)),fromBase:((180*3600)/PI_CONST)}};
+        const frequencyUnits = {'hz':{symbol:"Hz",toBase:1,fromBase:1},'khz':{symbol:"kHz",toBase:1000,fromBase:1/1000},'mhz':{symbol:"MHz",toBase:1e6,fromBase:1e-6},'ghz':{symbol:"GHz",toBase:1e9,fromBase:1e-9},'rpm':{symbol:"rpm",toBase:1/60,fromBase:60}};
+        const volumeFlowUnits = {'m3ps':{symbol:"m³/s",toBase:1,fromBase:1},'lps':{symbol:"L/s",toBase:0.001,fromBase:1000},'lpm':{symbol:"L/min",toBase:0.001/60,fromBase:60000},'gpm':{symbol:"gpm (US)",toBase:0.0000630902,fromBase:1/0.0000630902},'cfm':{symbol:"ft³/min",toBase:0.000471947,fromBase:1/0.000471947}};
+        const forceUnits = {'n':{symbol:"N",toBase:1,fromBase:1},'kn':{symbol:"kN",toBase:1000,fromBase:0.001},'lbf':{symbol:"lbf",toBase:4.44822,fromBase:1/4.44822},'kgf':{symbol:"kgf",toBase:9.80665,fromBase:1/9.80665},'dyn':{symbol:"dyn",toBase:1e-5,fromBase:1e5}};
+        const torqueUnits = {'nm':{symbol:"N·m",toBase:1,fromBase:1},'lbft':{symbol:"lb·ft",toBase:1.35582,fromBase:1/1.35582},'kgfm':{symbol:"kgf·m",toBase:9.80665,fromBase:1/9.80665}};
+        const chargeUnits = {'c':{symbol:"C",toBase:1,fromBase:1},'mah':{symbol:"mAh",toBase:3.6,fromBase:1/3.6},'ah':{symbol:"Ah",toBase:3600,fromBase:1/3600},'e':{symbol:"e (charge)",toBase:1.602176634e-19,fromBase:1/1.602176634e-19}};
+        const voltageUnits = {'v':{symbol:"V",toBase:1,fromBase:1},'mv':{symbol:"mV",toBase:0.001,fromBase:1000},'kv':{symbol:"kV",toBase:1000,fromBase:0.001}};
+        const resistanceUnits = {'ohm':{symbol:"Ω",toBase:1,fromBase:1},'kohm':{symbol:"kΩ",toBase:1000,fromBase:0.001},'mohm':{symbol:"MΩ",toBase:1e6,fromBase:1e-6}};
+        const capacitanceUnits = {'f':{symbol:"F",toBase:1,fromBase:1},'mf':{symbol:"mF",toBase:1e-3,fromBase:1e3},'uf':{symbol:"µF",toBase:1e-6,fromBase:1e6},'nf':{symbol:"nF",toBase:1e-9,fromBase:1e9},'pf':{symbol:"pF",toBase:1e-12,fromBase:1e12}};
+        const amountOfSubstanceUnits = {'mol':{symbol:"mol",toBase:1,fromBase:1},'mmol':{symbol:"mmol",toBase:0.001,fromBase:1000},'kmol':{symbol:"kmol",toBase:1000,fromBase:0.001}};
+
+        function openUnitConverterModal(conversionName, unitsDefinition, defaultFromUnitKey = null) {
+            const unitOptions = Object.keys(unitsDefinition).map(key => ({
+                value: key,
+                text: `${unitsDefinition[key].symbol} (${key.replace(/_/g, ' ')})` 
+            }));
+
+            const updateLivePreview = () => {
+                const valueStr = document.getElementById('convertValueInput')?.value;
+                const fromUnitSelect = document.getElementById('fromUnitSelect');
+                const toUnitSelect = document.getElementById('toUnitSelect');
+                const resultDisplayEl = document.getElementById('conversionResultDisplay');
+
+                if (!fromUnitSelect || !toUnitSelect || !resultDisplayEl) return;
+                const fromUnit = fromUnitSelect.value;
+                const toUnit = toUnitSelect.value;
+
+                if (!valueStr || !fromUnit || !toUnit) {
+                    resultDisplayEl.textContent = 'Select units...'; return;
+                }
+                const value = parseFloat(valueStr);
+                if (isNaN(value)) {
+                    resultDisplayEl.textContent = 'Enter a valid number...'; return;
+                }
+
+                try {
+                    const { result, originalSymbol, convertedSymbol } = performUnitConversion(value, fromUnit, unitsDefinition, toUnit);
+                    const resultFormatted = formatDisplayValueForUI(String(Number(result.toFixed(8)))); 
+                    const valueFormatted = formatDisplayValueForUI(String(value));
+                    resultDisplayEl.textContent = `${valueFormatted}${originalSymbol} ⇒ ${resultFormatted}${convertedSymbol}`;
+                } catch (error) {
+                    resultDisplayEl.textContent = 'Error in preview.'; console.error("Live preview error:", error);
+                }
+            };
+
+            const modalFields = [
+                { label: "Value to Convert:", id: "convertValueInput", type: "number", placeholder: "Enter value", required: true, oninput: updateLivePreview },
+                { label: "From Unit:", id: "fromUnitSelect", type: "select", options: unitOptions, onchange: updateLivePreview },
+                { label: "To Unit:", id: "toUnitSelect", type: "select", options: unitOptions, onchange: updateLivePreview },
+                { id: "conversionResultDisplay", type: "div" } 
+            ];
+            
+            showInputModal(`Unit Converter: ${conversionName}`, modalFields, 
+                (values) => { 
+                    const valueStr = values.convertValueInput;
+                    const fromUnit = values.fromUnitSelect;
+                    const toUnit = values.toUnitSelect;
+                    const value = parseFloat(valueStr);
+
+                    if (isNaN(value)) { showToast("Please enter a valid number to convert.", "error"); return; }
+                    if (!fromUnit || !unitsDefinition[fromUnit.toLowerCase()]) { showToast("Invalid 'From' unit selected.", "error"); return; }
+                    if (!toUnit || !unitsDefinition[toUnit.toLowerCase()]) { showToast("Invalid 'To' unit selected.", "error"); return; }
+
+                    try {
+                        const { result, originalSymbol, convertedSymbol } = performUnitConversion(value, fromUnit, unitsDefinition, toUnit);
+                        const resultFormatted = formatDisplayValueForUI(String(Number(result.toFixed(8))));
+                        const valueFormatted = formatDisplayValueForUI(String(value));
+                        const conversionExpression = `${valueFormatted}${originalSymbol} ⇒ ${resultFormatted}${convertedSymbol}`;
+                        
+                        clearAll(); 
+                        currentInput = String(result); 
+                        displayValue = resultFormatted; 
+                        ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue);
+                        isNewCalculation = true;
+                        updateDisplayUI();
+                        updateSecondaryDisplayUI(conversionExpression);
+                        addCalculationToHistory(`${conversionName}: ${valueFormatted}${originalSymbol}`, `${resultFormatted}${convertedSymbol}`);
+                        showToast("Conversion applied to display.", "success");
+                        hideInputModal();
+                        returnToBasicView(); 
+                    } catch (error) {
+                        showToast(`Conversion error: ${error.message}`, "error");
+                        console.error("Conversion submission error:", error, "Details:", {value, fromUnit, toUnit, unitsDefinition});
+                    }
+                }, 
+                () => { hideInputModal(); } 
+            );
+
+            setTimeout(() => {
+                const fromSelectEl = document.getElementById('fromUnitSelect');
+                const toSelectEl = document.getElementById('toUnitSelect');
+                if (fromSelectEl) {
+                    if (defaultFromUnitKey && unitOptions.some(opt => opt.value === defaultFromUnitKey)) {
+                        fromSelectEl.value = defaultFromUnitKey;
+                    } else if (unitOptions.length > 0) { fromSelectEl.value = unitOptions[0].value; }
+                }
+                if (toSelectEl) {
+                    let defaultToUnitValue = unitOptions.length > 1 ? unitOptions[1].value : (unitOptions.length > 0 ? unitOptions[0].value : '');
+                    if (fromSelectEl && fromSelectEl.value === defaultToUnitValue && unitOptions.length > 1) {
+                        defaultToUnitValue = (unitOptions[0].value === fromSelectEl.value && unitOptions.length > 1) ? unitOptions[1].value : unitOptions[0].value;
+                    } else if (unitOptions.length === 1 && fromSelectEl) { defaultToUnitValue = fromSelectEl.value; }
+                    
+                    if (unitOptions.some(opt => opt.value === defaultToUnitValue)) { toSelectEl.value = defaultToUnitValue; }
+                    else if (unitOptions.length > 0) { toSelectEl.value = unitOptions[0].value; }
+                }
+                updateLivePreview(); 
+            }, 0);
+        }
+
+        function performUnitConversion(value, unitKey, conversions, targetUnitKey) {
+            if (typeof unitKey !== 'string' || typeof targetUnitKey !== 'string') { throw new Error("Unit keys must be strings."); }
+            const sourceKey = unitKey.toLowerCase(); 
+            const destKey = targetUnitKey.toLowerCase();
+
+            const unitData = conversions[sourceKey];
+            const targetUnitData = conversions[destKey];
+
+            if (!unitData) throw new Error(`Unsupported source unit key: '${unitKey}'`);
+            if (!targetUnitData) throw new Error(`Unsupported target unit key: '${targetUnitKey}'`);
+
+            let valueInBaseUnit;
+            if (typeof unitData.toBase === 'function') { 
+                valueInBaseUnit = unitData.toBase(value);
+            } else { 
+                valueInBaseUnit = value * unitData.toBase;
+            }
+
+            let result;
+            if (typeof targetUnitData.fromBase === 'function') {
+                result = targetUnitData.fromBase(valueInBaseUnit);
+            } else {
+                result = valueInBaseUnit * targetUnitData.fromBase; 
+            }
+            return { result, originalSymbol: unitData.symbol, convertedSymbol: targetUnitData.symbol };
+        }
+
+        function openQuadraticSolverModal() {
+            const inputs = [
+                { label: "ax²+bx+c=0", type: "paragraph", text:"" },
+                { label: "Enter coefficient a:", id: "quadA", type: "number", placeholder: "e.g., 1", required: true },
+                { label: "Enter coefficient b:", id: "quadB", type: "number", placeholder: "e.g., 5", required: true },
+                { label: "Enter coefficient c:", id: "quadC", type: "number", placeholder: "e.g., 6", required: true }
+            ];
+            showInputModal("Solve Quadratic Equation", inputs, (values) => {
+                const a = parseFloat(values.quadA), b = parseFloat(values.quadB), c = parseFloat(values.quadC);
+                if (isNaN(a) || isNaN(b) || isNaN(c)) { showToast("Invalid coefficients.", "error"); hideInputModal(); return; }
+                if (a === 0) { showToast("'a' cannot be zero for a quadratic equation.", "error"); hideInputModal(); return; }
+                const discriminant = b*b - 4*a*c;
+                let r1, r2, txtResult;
+                if (discriminant > 0) {
+                    r1 = (-b + Math.sqrt(discriminant))/(2*a); r2 = (-b - Math.sqrt(discriminant))/(2*a);
+                    txtResult = `x₁=${formatDisplayValueForUI(String(r1))}, x₂=${formatDisplayValueForUI(String(r2))}`;
+                } else if (discriminant === 0) {
+                    r1 = -b/(2*a); txtResult = `x=${formatDisplayValueForUI(String(r1))}`;
+                } else {
+                    const realPart = (-b/(2*a)); const imagPart = (Math.sqrt(-discriminant)/(2*a));
+                    txtResult = `x₁=${formatDisplayValueForUI(String(realPart))}+${formatDisplayValueForUI(String(imagPart))}i, x₂=${formatDisplayValueForUI(String(realPart))}-${formatDisplayValueForUI(String(imagPart))}i`;
+                }
+                const exprForHist = `Quad: a=${a},b=${b},c=${c}`;
+                secondaryDisplay.textContent = exprForHist; displayValue = txtResult; currentInput = txtResult; 
+                ansValue = NaN; 
+                isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, txtResult);
+                showToast("Quadratic solved.", "success"); 
+                hideInputModal(); 
+                returnToBasicView();
+            }, () => { showToast("Quadratic solve cancelled.", "info"); hideInputModal(); });
+        }
+        
+        function handleKeyboardInput(event) {
+            if (inputModalOverlay.classList.contains('active')) { 
+                if (event.key === 'Enter') { event.preventDefault(); modalSubmitBtn.click(); }
+                else if (event.key === 'Escape') { event.preventDefault(); modalCancelBtn.click(); }
+                return;
+            }
+            if (sideDrawer.classList.contains('open')) {
+                const activeElement = document.activeElement;
+                if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'SELECT') && sideDrawer.contains(activeElement)) {
+                    if (event.key === 'Escape') { event.preventDefault(); closeSideDrawer(); } 
+                    return;
+                }
+                if (event.key === 'Escape') { event.preventDefault(); closeSideDrawer(); return; }
+            }
+
+            const key = event.key;
+            let handled = true;
+
+            if (key >= '0' && key <= '9') appendNumber(key);
+            else if (key === '.') appendDecimalPoint();
+            else if (key === '+') appendOperator('+');
+            else if (key === '-') appendOperator('-');
+            else if (key === '*') appendOperator('*');
+            else if (key === '/') appendOperator('/');
+            else if (key === '%') appendOperator('%');
+            else if (key === '(') appendOperator('(');
+            else if (key === ')') appendOperator(')');
+            else if (key === 'Enter' || key === '=') { event.preventDefault(); calculateResult(); }
+            else if (key === 'Backspace') deleteChar();
+            else if (key === 'Escape' || (key.toLowerCase() === 'c' && !event.ctrlKey && !event.metaKey)) { event.preventDefault(); clearAll(); } 
+            else if (key.toLowerCase() === 'a' && !event.ctrlKey && !event.metaKey) appendAns();
+            else handled = false;
+
+            if (handled) {
+                event.preventDefault();
+                playClickSound();
+                triggerVibration();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+    <script>
+    let liveBaseDecimalInput, liveBaseHexInput, liveBaseOctalInput, liveBaseBinaryInput;
+    let isProgrammaticallyUpdatingBaseInputs = false;
+
+    function setupLiveBaseConverterInputs() {
+        liveBaseDecimalInput = sideDrawerContent.querySelector('#liveBaseDecimal');
+        liveBaseHexInput = sideDrawerContent.querySelector('#liveBaseHex');
+        liveBaseOctalInput = sideDrawerContent.querySelector('#liveBaseOctal');
+        liveBaseBinaryInput = sideDrawerContent.querySelector('#liveBaseBinary');
+        const inputs = [liveBaseDecimalInput, liveBaseHexInput, liveBaseOctalInput, liveBaseBinaryInput];
+        inputs.forEach(input => {
+            if (input) input.addEventListener('input', handleLiveBaseInputChange);
+        });
+    }
+
+    function handleLiveBaseInputChange(event) {
+        if (isProgrammaticallyUpdatingBaseInputs) return;
+        const changedInput = event.target;
+        const sourceValue = changedInput.value.trim();
+        const sourceBase = parseInt(changedInput.dataset.base);
+
+        if (sourceValue === '') {
+            clearLiveBaseInputs(changedInput);
+            changedInput.classList.remove('invalid');
+            return;
+        }
+
+        let isValid = true;
+        if (sourceBase === 10) isValid = /^-?\d*$/.test(sourceValue); 
+        else if (sourceBase === 16) isValid = /^[0-9a-fA-F]*$/.test(sourceValue);
+        else if (sourceBase === 8) isValid = /^[0-7]*$/.test(sourceValue);
+        else if (sourceBase === 2) isValid = /^[01]*$/.test(sourceValue);
+        
+        if (!isValid) {
+            changedInput.classList.add('invalid');
+            return;
+        }
+        changedInput.classList.remove('invalid');
+        isProgrammaticallyUpdatingBaseInputs = true;
+
+        try {
+            let decimalValue;
+            let isNegative = false;
+            let valueToParse = sourceValue;
+
+            if (sourceBase === 10 && sourceValue.startsWith('-')) {
+                isNegative = true;
+                valueToParse = sourceValue.substring(1);
+                if (valueToParse === '') { 
+                    clearLiveBaseInputs(changedInput);
+                    isProgrammaticallyUpdatingBaseInputs = false; return;
+                }
+            }
+            
+            if (valueToParse === '') { 
+                 clearLiveBaseInputs(changedInput);
+                 isProgrammaticallyUpdatingBaseInputs = false; return;
+            }
+
+
+            decimalValue = parseInt(valueToParse, sourceBase);
+
+            if (isNaN(decimalValue)) {
+                changedInput.classList.add('invalid');
+                clearLiveBaseInputs(changedInput); 
+                isProgrammaticallyUpdatingBaseInputs = false; return;
+            }
+            
+            if (isNegative) decimalValue = -decimalValue;
+
+
+            if (liveBaseDecimalInput && liveBaseDecimalInput !== changedInput) liveBaseDecimalInput.value = decimalValue.toString(10);
+            const absDecimalValue = Math.abs(decimalValue);
+
+            if (liveBaseHexInput && liveBaseHexInput !== changedInput) liveBaseHexInput.value = (isNegative && decimalValue !== 0 ? "-" : "") + absDecimalValue.toString(16).toUpperCase();
+            if (liveBaseOctalInput && liveBaseOctalInput !== changedInput) liveBaseOctalInput.value = (isNegative && decimalValue !== 0 ? "-" : "") + absDecimalValue.toString(8);
+            if (liveBaseBinaryInput && liveBaseBinaryInput !== changedInput) liveBaseBinaryInput.value = (isNegative && decimalValue !== 0 ? "-" : "") + absDecimalValue.toString(2);
+            
+            [liveBaseDecimalInput, liveBaseHexInput, liveBaseOctalInput, liveBaseBinaryInput].forEach(inp => inp?.classList.remove('invalid'));
+
+        } catch (e) {
+            changedInput.classList.add('invalid');
+        } finally {
+            isProgrammaticallyUpdatingBaseInputs = false;
+        }
+    }
+
+    function clearLiveBaseInputs(excludeInput = null) {
+        const inputs = [liveBaseDecimalInput, liveBaseHexInput, liveBaseOctalInput, liveBaseBinaryInput];
+        inputs.forEach(input => {
+            if (input && input !== excludeInput) {
+                input.value = '';
+                input.classList.remove('invalid');
+            }
+        });
+    }
+
+    function copyBaseValue(inputId) {
+        const inputElement = document.getElementById(inputId);
+        if (inputElement && inputElement.value) {
+            navigator.clipboard.writeText(inputElement.value)
+                .then(() => showToast(`${inputElement.labels[0].textContent.split('(')[0].trim()} copied!`, 'success', 1500))
+                .catch(err => showToast('Copy failed. ' + err, 'error'));
+        } else {
+            showToast('Nothing to copy.', 'warning');
+        }
+    }
+    function setupStatisticsPanelListeners() {
+        const calculateBtn = sideDrawerContent.querySelector('#calculateStatsBtn');
+        if (calculateBtn) calculateBtn.addEventListener('click', performStatisticsCalculations);
+        const resultsArea = sideDrawerContent.querySelector('#statsResultsArea');
+        if(resultsArea) resultsArea.innerHTML = '<p class="results-placeholder">Results will appear here...</p>';
+    }
+
+    function performStatisticsCalculations() {
+        const inputEl = sideDrawerContent.querySelector('#statsDataInput');
+        const resultsArea = sideDrawerContent.querySelector('#statsResultsArea');
+        if (!inputEl || !resultsArea) return;
+
+        const rawInput = inputEl.value.trim();
+        if (!rawInput) {
+            resultsArea.innerHTML = '<p class="results-placeholder">Please enter some numbers.</p>'; return;
+        }
+        const numbers = rawInput.split(/[\s,]+/) 
+                                 .map(s => parseFloat(s.trim()))
+                                 .filter(n => !isNaN(n) && isFinite(n));
+        if (numbers.length === 0) {
+            resultsArea.innerHTML = '<p class="results-placeholder">No valid numbers found. Enter comma/space separated numbers.</p>'; return;
+        }
+
+        numbers.sort((a, b) => a - b);
+        const count = numbers.length;
+        const sum = numbers.reduce((acc, val) => acc + val, 0);
+        const mean = sum / count;
+        let median;
+        if (count % 2 === 0) { median = (numbers[count / 2 - 1] + numbers[count / 2]) / 2; }
+        else { median = numbers[Math.floor(count / 2)]; }
+
+        const frequencyMap = numbers.reduce((acc, val) => { acc[val] = (acc[val] || 0) + 1; return acc; }, {});
+        let maxFreq = 0; let modes = [];
+        for (const num in frequencyMap) {
+            if (frequencyMap[num] > maxFreq) { maxFreq = frequencyMap[num]; modes = [parseFloat(num)]; }
+            else if (frequencyMap[num] === maxFreq) { modes.push(parseFloat(num)); }
+        }
+        if (modes.length === count && count > 1) modes = ["N/A (all unique values)"]; 
+        else if (Object.keys(frequencyMap).every(key => frequencyMap[key] === maxFreq) && modes.length > 1 && modes.length === Object.keys(frequencyMap).length) {
+             modes = ["N/A (all values same frequency)"]; 
+        }
+
+
+        const min = numbers[0];
+        const max = numbers[count - 1];
+        const range = max - min;
+        const varianceSample = count > 1 ? numbers.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (count - 1) : 0;
+        const stdDevSample = count > 1 ? Math.sqrt(varianceSample) : 0;
+        const variancePopulation = numbers.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / count;
+        const stdDevPopulation = Math.sqrt(variancePopulation);
+
+        const resultsHeader = `<div class="stats-results-header"><h4>Statistics Results</h4><button class="copy-btn" title="Copy Results" onclick="copyStatsResults()"><i class="fas fa-copy"></i></button></div>`;
+        resultsArea.innerHTML = resultsHeader + `
+            <dl class="stats-result-grid">
+                <dt>Count:</dt><dd>${count}</dd>
+                <dt>Sum:</dt><dd>${formatDisplayValueForUI(String(sum))}</dd>
+                <dt>Mean:</dt><dd>${formatDisplayValueForUI(String(mean))}</dd>
+                <dt>Median:</dt><dd>${formatDisplayValueForUI(String(median))}</dd>
+                <dt>Mode(s):</dt><dd>${modes.map(m => formatDisplayValueForUI(String(m))).join(', ')}</dd>
+                <dt>Minimum:</dt><dd>${formatDisplayValueForUI(String(min))}</dd>
+                <dt>Maximum:</dt><dd>${formatDisplayValueForUI(String(max))}</dd>
+                <dt>Range:</dt><dd>${formatDisplayValueForUI(String(range))}</dd>
+                <dt>Variance (Sample):</dt><dd>${count > 1 ? formatDisplayValueForUI(String(varianceSample)) : 'N/A'}</dd>
+                <dt>Std. Dev. (Sample):</dt><dd>${count > 1 ? formatDisplayValueForUI(String(stdDevSample)) : 'N/A'}</dd>
+                <dt>Variance (Pop.):</dt><dd>${formatDisplayValueForUI(String(variancePopulation))}</dd>
+                <dt>Std. Dev. (Pop.):</dt><dd>${formatDisplayValueForUI(String(stdDevPopulation))}</dd>
+            </dl>
+        `;
+    }
+
+    function copyStatsResults() {
+        const resultsArea = sideDrawerContent.querySelector('#statsResultsArea');
+        if (resultsArea) {
+            const dlElement = resultsArea.querySelector('dl.stats-result-grid');
+            if (dlElement) {
+                let textToCopy = "Statistics Results:\n";
+                const items = dlElement.querySelectorAll('dt, dd');
+                items.forEach((item, index) => {
+                    textToCopy += item.textContent;
+                    if (item.tagName === 'DT') textToCopy += " "; else textToCopy += "\n";
+                });
+                navigator.clipboard.writeText(textToCopy.trim())
+                    .then(() => showToast('Stats results copied!', 'success'))
+                    .catch(err => showToast('Copy failed. ' + err, 'error'));
+            } else { showToast('No results to copy.', 'warning'); }
+        }
+    }
+
+    function setupFractionsPanelListeners() {
+        const modeButtons = sideDrawerContent.querySelectorAll('.fraction-mode-selection button');
+        modeButtons.forEach(btn => btn.addEventListener('click', () => setFractionToolMode(btn.dataset.mode)));
+
+        const opButtons = sideDrawerContent.querySelectorAll('#fractionToolArithmetic .fraction-operators button');
+        opButtons.forEach(btn => btn.addEventListener('click', () => selectFractionOperation(btn)));
+
+        sideDrawerContent.querySelector('#calculateFractionArithmeticBtn')?.addEventListener('click', calculateFractionArithmetic);
+        sideDrawerContent.querySelector('#performFractionSimplifyBtn')?.addEventListener('click', performFractionSimplify);
+        sideDrawerContent.querySelector('#performDecimalToFractionBtn')?.addEventListener('click', performDecimalToFraction);
+        
+        setFractionToolMode(currentFractionToolMode); 
+    }
+
+    function setFractionToolMode(mode) {
+        currentFractionToolMode = mode;
+        const toolContents = sideDrawerContent.querySelectorAll('.fraction-tool-content');
+        toolContents.forEach(content => content.classList.remove('active'));
+        const activeToolContent = sideDrawerContent.querySelector(`#fractionTool${mode.charAt(0).toUpperCase() + mode.slice(1)}`);
+        if (activeToolContent) activeToolContent.classList.add('active');
+
+        const modeButtons = sideDrawerContent.querySelectorAll('.fraction-mode-selection button');
+        modeButtons.forEach(btn => btn.classList.remove('active'));
+        const activeButton = sideDrawerContent.querySelector(`.fraction-mode-selection button[data-mode="${mode}"]`);
+        if (activeButton) activeButton.classList.add('active');
+        
+        if (mode === 'arithmetic') { 
+            const opButtons = sideDrawerContent.querySelectorAll('#fractionToolArithmetic .fraction-operators button');
+            opButtons.forEach(btn => btn.classList.remove('active'));
+            const currentOpBtn = sideDrawerContent.querySelector(`#fractionToolArithmetic .fraction-operators button[data-op="${currentFractionArithmeticOperation}"]`);
+            if (currentOpBtn) currentOpBtn.classList.add('active');
+        }
+    }
+
+    function selectFractionOperation(buttonEl) {
+        currentFractionArithmeticOperation = buttonEl.dataset.op;
+        const opButtons = sideDrawerContent.querySelectorAll('#fractionToolArithmetic .fraction-operators button');
+        opButtons.forEach(btn => btn.classList.remove('active'));
+        buttonEl.classList.add('active');
+    }
+    function gcd_pair(a, b) { a = Math.abs(a); b = Math.abs(b); if (b === 0) return a; return gcd_pair(b, a % b); }
+    function parseFractionInput(str) { str = String(str).trim(); if (!str) return null; let sign = 1; if (str.startsWith('-')) { sign = -1; str = str.substring(1).trim(); } const mixedMatch = str.match(/^(\d+)\s+(?:and\s+)?(\d+)\/(\d+)$/); if (mixedMatch) { const i = parseInt(mixedMatch[1]); const n = parseInt(mixedMatch[2]); const d = parseInt(mixedMatch[3]); if (d === 0 || n < 0 || i < 0 || n >= d) return null; return { s: sign, i: i, n: n, d: d, type: 'mixed' }; } const fractionMatch = str.match(/^(\d+)\/(\d+)$/); if (fractionMatch) { const n = parseInt(fractionMatch[1]); const d = parseInt(fractionMatch[2]); if (d === 0 || n < 0) return null; return { s: sign, i: 0, n: n, d: d, type: 'proper/improper' }; } const integerMatch = str.match(/^(\d+)$/); if (integerMatch) { const i = parseInt(integerMatch[1]); if (i < 0) return null; return { s: sign, i: i, n: 0, d: 1, type: 'integer' }; } return null; }
+    function toImproper(frac) { if (!frac) return null; return { s: frac.s, n: frac.i * frac.d + frac.n, d: frac.d }; }
+    function simplifyFraction(improperFrac) { if (!improperFrac || improperFrac.d === 0) return null; if (improperFrac.n === 0) return { s: 1, n: 0, d: 1 }; const common = gcd_pair(Math.abs(improperFrac.n), Math.abs(improperFrac.d)); return { s: improperFrac.s, n: Math.abs(improperFrac.n) / common, d: Math.abs(improperFrac.d) / common }; }
+    function toMixed(simplifiedImproperFrac) { if (!simplifiedImproperFrac) return null; const n_abs = simplifiedImproperFrac.n; const d_abs = simplifiedImproperFrac.d; if (d_abs === 0) return null; if (n_abs < d_abs || n_abs === 0) { return { s: simplifiedImproperFrac.s, i: 0, n: n_abs, d: d_abs }; } const i_val = Math.floor(n_abs / d_abs); const newN_abs = n_abs % d_abs; return { s: simplifiedImproperFrac.s, i: i_val, n: newN_abs, d: d_abs }; }
+    function fractionToString(fracObj, type = 'improper') { if (!fracObj) return "Invalid"; let signStr = fracObj.s === -1 ? "-" : ""; if (type === 'mixed') { const mixed = (fracObj.type === 'mixed' || fracObj.type === 'integer') ? fracObj : toMixed(fracObj); if (mixed.i === 0 && mixed.n === 0) return "0"; if (mixed.i === 0) return `${signStr}${mixed.n}/${mixed.d}`; if (mixed.n === 0) return `${signStr}${mixed.i}`; return `${signStr}${mixed.i} ${mixed.n}/${mixed.d}`; } else { const improper = (fracObj.type === 'proper/improper' || fracObj.type === 'integer' || (fracObj.i === 0 && fracObj.type !== 'mixed')) ? fracObj : toImproper(fracObj); if (improper.n === 0) return "0"; return `${signStr}${improper.n}/${improper.d}`; } }
+    function fractionToDecimal(improperFrac) { if (!improperFrac || improperFrac.d === 0) return NaN; return improperFrac.s * (improperFrac.n / improperFrac.d); }
+    function decimalToFraction(decimal, maxDenominator = 100000) { if (isNaN(decimal) || !isFinite(decimal)) return null; const originalSign = decimal < 0 ? -1 : 1; decimal = Math.abs(decimal); if (decimal === 0) return { s: 1, n: 0, d: 1 }; if (Number.isInteger(decimal)) return { s: originalSign, n: decimal, d: 1 }; let h1 = 1, h2 = 0, k1 = 0, k2 = 1; let b = decimal; do { let a = Math.floor(b); let aux = h1; h1 = a * h1 + h2; h2 = aux; aux = k1; k1 = a * k1 + k2; k2 = aux; b = 1 / (b - a); } while (Math.abs(decimal - h1 / k1) > decimal * 1e-9 && k1 <= maxDenominator); if (k1 > maxDenominator) { return simplifyFraction({ s: originalSign, n: h2, d: k2 }); } return simplifyFraction({ s: originalSign, n: h1, d: k1 }); }
+
+    function calculateFractionArithmetic() { 
+        const frac1InputEl = sideDrawerContent.querySelector('#fracArith1Input');
+        const frac2InputEl = sideDrawerContent.querySelector('#fracArith2Input');
+        const resultImproperDisplay = sideDrawerContent.querySelector('#fracArithResultImproper');
+        const resultMixedDisplay = sideDrawerContent.querySelector('#fracArithResultMixed');
+        const resultDecimalDisplay = sideDrawerContent.querySelector('#fracArithResultDecimal');
+
+        if (!frac1InputEl || !frac2InputEl || !resultImproperDisplay || !resultMixedDisplay || !resultDecimalDisplay) { showToast("Fraction arithmetic elements not found.", "error"); return; }
+        const f1Parsed = parseFractionInput(frac1InputEl.value); const f2Parsed = parseFractionInput(frac2InputEl.value);
+        if (!f1Parsed) { showToast("Invalid Fraction 1. Use '1 2/3', '3/4', or '5'.", "error"); frac1InputEl.focus(); return; }
+        if (!f2Parsed) { showToast("Invalid Fraction 2. Use '1 2/3', '3/4', or '5'.", "error"); frac2InputEl.focus(); return; }
+        const f1Improper = toImproper(f1Parsed); const f2Improper = toImproper(f2Parsed);
+        if (!f1Improper || !f2Improper) { showToast("Error processing fractions.", "error"); return; }
+        let resultN, resultD;
+        const n1_signed = f1Improper.s * f1Improper.n; const d1 = f1Improper.d;
+        const n2_signed = f2Improper.s * f2Improper.n; const d2 = f2Improper.d;
+        switch (currentFractionArithmeticOperation) {
+            case 'add': resultN = n1_signed * d2 + n2_signed * d1; resultD = d1 * d2; break;
+            case 'subtract': resultN = n1_signed * d2 - n2_signed * d1; resultD = d1 * d2; break;
+            case 'multiply': resultN = n1_signed * n2_signed; resultD = d1 * d2; break;
+            case 'divide':
+                if (n2_signed === 0) { showToast("Cannot divide by zero fraction.", "error"); return; }
+                resultN = n1_signed * d2; resultD = d1 * n2_signed;
+                if (resultD < 0) { resultN *= -1; resultD *= -1; } break;
+            default: showToast("Invalid operation.", "error"); return;
+        }
+        if (resultD === 0) { showToast("Result has zero denominator.", "error"); return; }
+        const resultSign = resultN < 0 ? -1 : 1;
+        const simplifiedResult = simplifyFraction({ s: resultSign, n: Math.abs(resultN), d: Math.abs(resultD) });
+        resultImproperDisplay.textContent = fractionToString(simplifiedResult, 'improper');
+        resultMixedDisplay.textContent = fractionToString(toMixed(simplifiedResult), 'mixed');
+        resultDecimalDisplay.textContent = fractionToDecimal(simplifiedResult).toFixed(8);
+        showToast("Fraction calculation complete.", "success");
+    }
+    function performFractionSimplify() { 
+        const inputEl = sideDrawerContent.querySelector('#fracSimplifyInput');
+        const resultImproperEl = sideDrawerContent.querySelector('#fracSimplifyResultImproper');
+        const resultMixedEl = sideDrawerContent.querySelector('#fracSimplifyResultMixed');
+        if (!inputEl || !resultImproperEl || !resultMixedEl) { showToast("Simplify fraction elements not found.", "error"); return; }
+        const parsed = parseFractionInput(inputEl.value);
+        if (parsed) { const improper = toImproper(parsed); const simplified = simplifyFraction(improper);
+            if (simplified) { resultImproperEl.textContent = fractionToString(simplified, 'improper'); resultMixedEl.textContent = fractionToString(toMixed(simplified), 'mixed'); showToast("Fraction simplified.", "success");
+            } else { showToast("Could not simplify the fraction.", "error"); }
+        } else { showToast("Invalid fraction input for simplification.", "warning"); inputEl.focus(); }
+    }
+    function performDecimalToFraction() { 
+        const inputEl = sideDrawerContent.querySelector('#fracDecimalInput');
+        const resultImproperEl = sideDrawerContent.querySelector('#fracToFractionResultImproper');
+        const resultMixedEl = sideDrawerContent.querySelector('#fracToFractionResultMixed');
+        if (!inputEl || !resultImproperEl || !resultMixedEl) { showToast("Decimal to fraction elements not found.", "error"); return; }
+        const decimalValue = parseFloat(inputEl.value);
+        if (isNaN(decimalValue)) { showToast("Invalid decimal input.", "warning"); inputEl.focus(); return; }
+        const frac = decimalToFraction(decimalValue);
+        if (frac) { resultImproperEl.textContent = fractionToString(frac, 'improper'); resultMixedEl.textContent = fractionToString(toMixed(frac), 'mixed'); showToast("Converted to fraction.", "success");
+        } else { showToast("Could not convert decimal to fraction.", "error"); }
+    }
+    
+    function openNPRModal() {
+        const inputs = [ { label: "nPr: Enter n (total items, integer):", id: "nprN", type: "number", placeholder: "e.g., 5", required: true, pattern: "\\d+" }, { label: "nPr: Enter r (items to choose, integer):", id: "nprR", type: "number", placeholder: "e.g., 2", required: true, pattern: "\\d+" } ];
+        showInputModal("nPr Permutation", inputs, (values) => {
+            const n = parseInt(values.nprN), r = parseInt(values.nprR);
+            if (isNaN(n) || isNaN(r) || n < 0 || r < 0 || r > n || !Number.isInteger(n) || !Number.isInteger(r)) { showToast("Invalid nPr input (n>=r>=0, integers).", "error"); hideInputModal(); return; }
+            function calc_npr(n_val, r_val) { if (r_val > n_val) return 0; if (r_val === 0) return 1; if (n_val > 170) return Infinity; let res = 1; for (let i=0; i<r_val; i++) res *= (n_val-i); return res; }
+            const result = calc_npr(n,r); const resultStr = formatDisplayValueForUI(String(result)); const exprForHist = `${n}P${r}`;
+            displayValue = resultStr; currentInput = String(result); ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue); secondaryDisplay.textContent = `${exprForHist}=${resultStr}`; isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, resultStr);
+            showToast("nPr calculated.", "success"); hideInputModal(); returnToBasicView();
+        }, () => { showToast("nPr cancelled.", "info"); hideInputModal(); });
+    }
+    function openNCRModal() {
+        const inputs = [ { label: "nCr: Enter n (total items, integer):", id: "ncrN", type: "number", placeholder: "e.g., 5", required: true, pattern: "\\d+" }, { label: "nCr: Enter r (items to choose, integer):", id: "ncrR", type: "number", placeholder: "e.g., 2", required: true, pattern: "\\d+" } ];
+        showInputModal("nCr Combination", inputs, (values) => {
+            const n = parseInt(values.ncrN), r = parseInt(values.ncrR);
+            if (isNaN(n) || isNaN(r) || n < 0 || r < 0 || r > n || !Number.isInteger(n) || !Number.isInteger(r)) { showToast("Invalid nCr input (n>=r>=0, integers).", "error"); hideInputModal(); return; }
+            function calc_ncr(n_val, r_val) { if (r_val < 0 || r_val > n_val) return 0; if (r_val === 0 || r_val === n_val) return 1; if (r_val > n_val/2) r_val = n_val-r_val; if (n_val > 170) return Infinity; let res = 1; for (let i=1; i<=r_val; i++) res = res * (n_val-i+1)/i; return res; }
+            const result = calc_ncr(n,r); const resultStr = formatDisplayValueForUI(String(result)); const exprForHist = `${n}C${r}`;
+            displayValue = resultStr; currentInput = String(result); ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue); secondaryDisplay.textContent = `${exprForHist}=${resultStr}`; isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, resultStr);
+            showToast("nCr calculated.", "success"); hideInputModal(); returnToBasicView();
+        }, () => { showToast("nCr cancelled.", "info"); hideInputModal(); });
+    }
+    function openFibonacciModal() {
+        const inputs = [{ label: "Fib(n): Enter n (0-40, integer):", id: "fibN", type: "number", placeholder: "e.g., 10", required: true, pattern: "\\d+" }];
+        showInputModal("Fibonacci Number", inputs, (values) => {
+            const n = parseInt(values.fibN);
+            if (isNaN(n) || n < 0 || n > 40 || !Number.isInteger(n)) { showToast("Invalid input for Fibonacci (integer 0-40).", "error"); hideInputModal(); return; }
+            function fib(num) { if (num <= 1) return num; let a = 0, b = 1, temp; for (let i = 2; i <= num; i++) { temp = a + b; a = b; b = temp; } return b; }
+            const result = fib(n); const resultStr = formatDisplayValueForUI(String(result)); const exprForHist = `Fib(${n})`;
+            displayValue = resultStr; currentInput = String(result); ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue); secondaryDisplay.textContent = `${exprForHist} = ${resultStr}`; isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, resultStr);
+            showToast(`Fib(${n}) calculated.`, "success"); hideInputModal(); returnToBasicView();
+        }, () => { showToast("Fibonacci cancelled.", "info"); hideInputModal(); });
+    }
+    function openXPercentOfYModal() {
+        const inputs = [ { label: "X% of Y: Enter X (percentage value):", id: "percentX", type: "number", placeholder: "e.g., 20", required: true }, { label: "X% of Y: Enter Y (base value):", id: "percentY", type: "number", placeholder: "e.g., 150", required: true } ];
+        showInputModal("X% of Y Calculation", inputs, (values) => {
+            const x = parseFloat(values.percentX); const y = parseFloat(values.percentY);
+            if (isNaN(x) || isNaN(y)) { showToast("Invalid numbers for X% of Y.", "error"); hideInputModal(); return; }
+            const result = (x / 100) * y; const resultStr = formatDisplayValueForUI(String(result)); const exprForHist = `${formatDisplayValueForUI(String(x))}% of ${formatDisplayValueForUI(String(y))}`;
+            displayValue = resultStr; currentInput = String(result); ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue); secondaryDisplay.textContent = `${exprForHist} = ${resultStr}`; isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, resultStr);
+            showToast("Percentage calculated.", "success"); hideInputModal(); returnToBasicView();
+        }, () => { showToast("Percentage calculation cancelled.", "info"); hideInputModal(); });
+    }
+    function openGCDModal() {
+        const inputs = [{ label: "Enter integers for GCD/HCF (comma-separated):", id: "gcdNumbers", type: "textarea", placeholder: "e.g., 12, 18, 30", required: true }];
+        showInputModal("GCD/HCF Calculation", inputs, (values) => {
+            const rawInput = values.gcdNumbers.trim(); const numbers = rawInput.split(/[\s,]+/).map(s => { const num = parseInt(s.trim()); return !isNaN(num) && Number.isInteger(num) ? num : NaN; }).filter(n => !isNaN(n));
+            if (numbers.length < 2) { showToast("Please enter at least two valid integers.", "error"); hideInputModal(); return; }
+            function gcd_multiple(arr) { if (!arr || arr.length === 0) return NaN; if (arr.length === 1) return Math.abs(arr[0]); let res = arr[0]; for (let i = 1; i < arr.length; i++) res = gcd_pair(res, arr[i]); return res; }
+            const result = gcd_multiple(numbers);
+            if (isNaN(result)) { showToast("Error in GCD calculation.", "error"); } else {
+                const resultStr = formatDisplayValueForUI(String(result)); const exprForHist = `GCD(${numbers.join(',')})`;
+                displayValue = resultStr; currentInput = String(result); ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue); secondaryDisplay.textContent = `${exprForHist} = ${resultStr}`; isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, resultStr);
+                showToast("GCD/HCF calculated.", "success");
+            } hideInputModal(); returnToBasicView();
+        }, () => { showToast("GCD/HCF calculation cancelled.", "info"); hideInputModal(); });
+    }
+    function openLCMModal() {
+        const inputs = [{ label: "Enter integers for LCM (comma-separated):", id: "lcmNumbers", type: "textarea", placeholder: "e.g., 12, 18, 30", required: true }];
+        showInputModal("LCM Calculation", inputs, (values) => {
+            const rawInput = values.lcmNumbers.trim(); const numbers = rawInput.split(/[\s,]+/).map(s => { const num = parseInt(s.trim()); return !isNaN(num) && Number.isInteger(num) ? num : NaN; }).filter(n => !isNaN(n));
+            if (numbers.length < 2) { showToast("Please enter at least two valid integers.", "error"); hideInputModal(); return; }
+            function lcm_pair(a, b) { a = Math.abs(a); b = Math.abs(b); if (a === 0 || b === 0) return 0; const res = (a * b) / gcd_pair(a, b); return isFinite(res) ? res : Infinity; }
+            function lcm_multiple(arr) { if (!arr || arr.length === 0) return NaN; if (arr.length === 1) return Math.abs(arr[0]); if (arr.some(n => n === 0)) return 0; let res = arr[0]; for (let i = 1; i < arr.length; i++) { res = lcm_pair(res, arr[i]); if (res === Infinity) return Infinity; } return res; }
+            const result = lcm_multiple(numbers);
+            if (isNaN(result) || result === Infinity) { showToast("Error in LCM (result too large or invalid input).", "error"); } else {
+                const resultStr = formatDisplayValueForUI(String(result)); const exprForHist = `LCM(${numbers.join(',')})`;
+                displayValue = resultStr; currentInput = String(result); ansValue = result; localStorage.setItem('swiftcalc_ansValue_v1', ansValue); secondaryDisplay.textContent = `${exprForHist} = ${resultStr}`; isNewCalculation = true; updateDisplayUI(); addCalculationToHistory(exprForHist, resultStr);
+                showToast("LCM calculated.", "success");
+            } hideInputModal(); returnToBasicView();
+        }, () => { showToast("LCM calculation cancelled.", "info"); hideInputModal(); });
+    }
+    function openSolve2x2Modal() {
+        const inputs = [ { label: "Eq 1: a₁x + b₁y = c₁", type: "paragraph", text: ""}, { label: "a₁:", id: "s2_a1", type: "number", required: true }, { label: "b₁:", id: "s2_b1", type: "number", required: true }, { label: "c₁:", id: "s2_c1", type: "number", required: true }, { label: "Eq 2: a₂x + b₂y = c₂", type: "paragraph", text: ""}, { label: "a₂:", id: "s2_a2", type: "number", required: true }, { label: "b₂:", id: "s2_b2", type: "number", required: true }, { label: "c₂:", id: "s2_c2", type: "number", required: true }, ];
+        showInputModal("Solve 2x2 Linear System", inputs, (values) => {
+            const c = Object.values(values).map(parseFloat); if (c.some(isNaN)) { showToast("Invalid coefficients.", "error"); hideInputModal(); return; }
+            const D = c[0]*c[5] - c[1]*c[4]; let txt, expr = `Sys2x2: [${c[0]}x+${c[1]}y=${c[2]}; ${c[4]}x+${c[5]}y=${c[6]}]`;
+            if (Math.abs(D) < 1e-9) { const Dx_c = c[2]*c[5]-c[1]*c[6], Dy_c = c[0]*c[6]-c[2]*c[4]; txt = (Math.abs(Dx_c)<1e-9 && Math.abs(Dy_c)<1e-9) ? "Infinite solutions" : "No unique solution"; }
+            else { const x=(c[2]*c[5]-c[1]*c[6])/D, y=(c[0]*c[6]-c[2]*c[4])/D; txt = `x=${formatDisplayValueForUI(String(x))}, y=${formatDisplayValueForUI(String(y))}`; }
+            displayValue = txt; currentInput = txt; isNewCalculation = true; updateDisplayUI(); secondaryDisplay.textContent = expr; addCalculationToHistory(expr, txt);
+            showToast("2x2 System Solved.", "success"); hideInputModal(); returnToBasicView();
+        }, () => { showToast("2x2 System solve cancelled.", "info"); hideInputModal(); });
+    }
+    function openSolve3x3Modal() {
+        const inputs = [ { label: "Eq 1: a₁x+b₁y+c₁z=d₁", type: "paragraph", text:""}, { label: "a₁:", id: "s3_a1", type: "number", required: true }, { label: "b₁:", id: "s3_b1", type: "number", required: true }, { label: "c₁:", id: "s3_c1", type: "number", required: true }, { label: "d₁:", id: "s3_d1", type: "number", required: true }, { label: "Eq 2: a₂x+b₂y+c₂z=d₂", type: "paragraph", text:""}, { label: "a₂:", id: "s3_a2", type: "number", required: true }, { label: "b₂:", id: "s3_b2", type: "number", required: true }, { label: "c₂:", id: "s3_c2", type: "number", required: true }, { label: "d₂:", id: "s3_d2", type: "number", required: true }, { label: "Eq 3: a₃x+b₃y+c₃z=d₃", type: "paragraph", text:""}, { label: "a₃:", id: "s3_a3", type: "number", required: true }, { label: "b₃:", id: "s3_b3", type: "number", required: true }, { label: "c₃:", id: "s3_c3", type: "number", required: true }, { label: "d₃:", id: "s3_d3", type: "number", required: true }, ];
+        showInputModal("Solve 3x3 Linear System", inputs, (values) => {
+            const cf = Object.values(values).map(parseFloat); if (cf.some(isNaN)) { showToast("Invalid coefficients.", "error"); hideInputModal(); return; }
+            const det = (m) => m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1]) - m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0]) + m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+            const D_m = [[cf[0],cf[1],cf[2]], [cf[4],cf[5],cf[6]], [cf[8],cf[9],cf[10]]]; const D = det(D_m);
+            let txt, expr = `Sys3x3: [${cf[0]}x+...=${cf[3]}; ...]`;
+            if (Math.abs(D) < 1e-9) {
+                const Dx_m_c = [[cf[3],cf[1],cf[2]], [cf[7],cf[5],cf[6]], [cf[11],cf[9],cf[10]]]; const Dy_m_c = [[cf[0],cf[3],cf[2]], [cf[4],cf[7],cf[6]], [cf[8],cf[11],cf[10]]]; const Dz_m_c = [[cf[0],cf[1],cf[3]], [cf[4],cf[5],cf[7]], [cf[8],cf[9],cf[11]]];
+                txt = (Math.abs(det(Dx_m_c))<1e-9 && Math.abs(det(Dy_m_c))<1e-9 && Math.abs(det(Dz_m_c))<1e-9) ? "Infinite solutions" : "No unique solution";
+            } else {
+                const Dx_m = [[cf[3],cf[1],cf[2]], [cf[7],cf[5],cf[6]], [cf[11],cf[9],cf[10]]]; const Dy_m = [[cf[0],cf[3],cf[2]], [cf[4],cf[7],cf[6]], [cf[8],cf[11],cf[10]]]; const Dz_m = [[cf[0],cf[1],cf[3]], [cf[4],cf[5],cf[7]], [cf[8],cf[9],cf[11]]];
+                const x=det(Dx_m)/D, y=det(Dy_m)/D, z=det(Dz_m)/D;
+                txt = `x=${formatDisplayValueForUI(String(x))}, y=${formatDisplayValueForUI(String(y))}, z=${formatDisplayValueForUI(String(z))}`;
+            }
+            displayValue = txt; currentInput = txt; isNewCalculation = true; updateDisplayUI(); secondaryDisplay.textContent = expr; addCalculationToHistory(expr, txt);
+            showToast("3x3 System Solved.", "success"); hideInputModal(); returnToBasicView();
+        }, () => { showToast("3x3 System solve cancelled.", "info"); hideInputModal(); });
+    }
+
+    </script>
+</body>
+</html>
